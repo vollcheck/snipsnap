@@ -1,0 +1,8 @@
+/.cpcache
+/.clj-kondo/.cache
+/.lsp
+/.nrepl-port
+/.portal
+/.socket-repl-port
+/target
+/snipsnap_db

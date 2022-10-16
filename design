@@ -1,0 +1,24 @@
+notes on snipsnap database/routes design
+
+-- MODELS
+user
+	id
+	login
+	username
+	password
+
+snippet
+	id
+	user_id
+	title
+	content
+	create_date
+	update_date
+
+-- ROUTES
+	/ - dashboard
+	/<username> - user profile
+	/<username>/<title> - specific gist
+	/<username>/<id> - faster for above
+	/login
+	/register

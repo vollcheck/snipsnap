@@ -1,0 +1,22 @@
+{:paths ["resources" "src"]
+ :deps {org.clojure/clojure {:mvn/version "1.10.3"}
+
+        com.github.seancorfield/next.jdbc {:mvn/version "1.1.646"}
+        com.stuartsierra/component {:mvn/version "1.0.0"}
+
+        compojure/compojure {:mvn/version "1.6.2"}
+        ring/ring {:mvn/version "1.9.2"}
+        ring/ring-defaults {:mvn/version "0.3.2"}
+
+        selmer/selmer {:mvn/version "1.12.33"}
+
+        org.xerial/sqlite-jdbc {:mvn/version "3.34.0"}}
+ :aliases
+ {:test {:extra-paths ["test"]
+         :extra-deps
+         {com.h2database/h2 {:mvn/version "1.4.200"}
+          io.github.cognitect-labs/test-runner
+          {:git/tag "v0.5.1" :git/sha "dfb30dd"}}}
+  :build {:replace-deps {io.github.seancorfield/build-clj
+                         {:git/tag "v0.8.0" :git/sha "9bd8b8a"}}
+          :ns-default build}}}
