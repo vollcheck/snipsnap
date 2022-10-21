@@ -1,24 +1,41 @@
 notes on snipsnap database/routes design
 
 -- MODELS
-user
-	id
-	login
-	username
-	password
+users
+	id - id (auto)
+	username - text
+	password - text
+        email - text
+        avatar - bytes (optional)
+        bio - text (optional, rich one?)
 
-snippet
-	id
-	user_id
-	title
-	content
-	create_date
-	update_date
+language
+        id - id
+        name - text
+
+snaps
+	id - id
+	user_id - id - relation to user
+	title - text
+	content - text (rich one?)
+        language_id - relation to language
+	create_date - date - auto set
+	update_date - date - auto set
 
 -- ROUTES
-	/ - dashboard
-	/<username> - user profile
-	/<username>/<title> - specific gist
-	/<username>/<id> - faster for above
 	/login
-	/register
+	/register - create user
+        /password-reset (optional)
+	/ - dashboard
+	/<username> - user profile + list of recent snaps
+	/<username>/<title> - specific snap - CRUD on snap entity
+	/<username>/<id> - same as above (optional)
+
+
+-- TASKS
+        + make one abstract CRUD method for each entity
+        + make ability to load db seed data dynamically
+        + replace `println` with logging here and there
+        + implement routes
+        + update tests
+        + `create-date` and `update-date` auto inserting

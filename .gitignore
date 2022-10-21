@@ -5,4 +5,4 @@
 /.portal
 /.socket-repl-port
 /target
-/snipsnap_db
+/db.sqlite

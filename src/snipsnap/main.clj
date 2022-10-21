@@ -40,7 +40,7 @@
             [ring.middleware.defaults :as ring-defaults]
             [ring.util.response :as resp]
             [snipsnap.controllers.user :as user-ctl]
-            [snipsnap.model.user-manager :as model])
+            [snipsnap.model.manager :as db-manager])
   (:gen-class))
 
 ;; Implement your application's lifecycle here:
@@ -127,14 +127,18 @@
   [application]
   (let-routes [wrap (middleware-stack application #'my-middleware)]
     (GET  "/"                        []              (wrap #'user-ctl/default))
+
     ;; horrible: application should POST to this URL!
     (GET  "/user/delete/:id{[0-9]+}" [id :<< as-int] (wrap #'user-ctl/delete-by-id))
+
     ;; add a new user:
     (GET  "/user/form"               []              (wrap #'user-ctl/edit))
+
     ;; edit an existing user:
     (GET  "/user/form/:id{[0-9]+}"   [id :<< as-int] (wrap #'user-ctl/edit))
     (GET  "/user/list"               []              (wrap #'user-ctl/get-users))
     (POST "/user/save"               []              (wrap #'user-ctl/save))
+
     ;; this just resets the change tracker but really should be a POST :)
     (GET  "/reset"                   []              (wrap #'user-ctl/reset-changes))
     (route/resources "/")
@@ -212,13 +216,24 @@
   ([port] (new-system port true))
   ([port repl]
    (component/system-map :application (my-application {:repl repl})
-                         :database    (model/setup-database)
+                         :database    (db-manager/setup-database)
                          :web-server  (web-server #'my-handler port))))
 
 (comment
   (def system (new-system 8888))
   (alter-var-root #'system component/start)
   (alter-var-root #'system component/stop)
+
+  (def ds (get-in system [:database :datasource]))
+
+  (require '[next.jdbc :as jdbc])
+  (jdbc/execute-one! ds ["select * from user"]) ;; => #:user{:id 1,
+;;           :username "vollcheck",
+;;           :password "admin",
+;;           :email "vollcheck@snipsnap.com",
+;;           :avatar
+;;           "https://avatars.githubusercontent.com/u/42350899?v=4",
+;;           :bio "clojure enjoyer"}
   ;; the comma here just "anchors" the closing paren on this line,
   ;; which makes it easier to put you cursor at the end of the lines
   ;; above when you want to evaluate them into the REPL:
@@ -240,8 +255,8 @@
   nil
   snipsnap.main=> (def db (-> repl-system deref :application :database))
   #'snipsnap.main/db
-  snipsnap.main=> (jdbc/execute! (db) [\"select * from addressbook\"])
-  [#:addressbook{:id 1, :first_name \"Sean\", :last_name \"Corfield\", :email \"sean@worldsingles.com\", :department_id 4}]
+  snipsnap.main=> (jdbc/execute! (db) [\"select * from user\"])
+  ...
   snipsnap.main=>"}
   repl-system
   (atom nil))

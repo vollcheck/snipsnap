@@ -3,8 +3,11 @@
 (ns snipsnap.controllers.user
   "The main controller for the user management portion of this app."
   (:require [ring.util.response :as resp]
+            [ring.middleware.json :refer [wrap-json-response wrap-json-body]]
             [selmer.parser :as tmpl]
-            [snipsnap.model.user-manager :as model]))
+            [snipsnap.model.manager :as db-manager]
+            [snipsnap.model.language :as language]
+            [snipsnap.model.user :as user]))
 
 (def ^:private changes
   "Count the number of changes (since the last reload)."
@@ -38,7 +41,7 @@
   "Compojure has already coerced the :id parameter to an int."
   [req]
   (swap! changes inc)
-  (model/delete-user-by-id (-> req :application/component :database)
+  (user/delete-user-by-id (-> req :application/component :database)
                            (get-in req [:params :id]))
   (resp/redirect "/user/list"))
 
@@ -51,17 +54,17 @@
   [req]
   (let [db   (-> req :application/component :database)
         user (when-let [id (get-in req [:params :id])]
-               (model/get-user-by-id db id))]
+               (user/get-user-by-id db id))]
     (-> req
         (update :params assoc
                 :user user
-                :departments (model/get-departments db))
+                :language (language/get-languages db))
         (assoc :application/view "form"))))
 
 (defn get-users
   "Render the list view with all the users in the addressbook."
   [req]
-  (let [users (model/get-users (-> req :application/component :database))]
+  (let [users (user/get-users (-> req :application/component :database))]
     (-> req
         (assoc-in [:params :users] users)
         (assoc :application/view "list"))))
@@ -83,5 +86,5 @@
       (->> (reduce-kv (fn [m k v] (assoc! m (keyword "addressbook" (name k)) v))
                       (transient {}))
            (persistent!)
-           (model/save-user (-> req :application/component :database))))
+           (user/save-user (-> req :application/component :database))))
   (resp/redirect "/user/list"))
