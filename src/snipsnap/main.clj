@@ -38,6 +38,8 @@
             ;; ...and comment out this Jetty line:
             [ring.adapter.jetty :refer [run-jetty]]
             [ring.middleware.defaults :as ring-defaults]
+            [ring.middleware.json :refer [wrap-json-response wrap-json-body
+                                          wrap-json-params]]
             [ring.util.response :as resp]
             [snipsnap.controllers.user :as user-ctl]
             [snipsnap.model.manager :as db-manager])
@@ -106,7 +108,11 @@
                                          ;; disable XSRF for now
                                          (assoc-in [:security :anti-forgery] false)
                                          ;; support load balancers
-                                         (assoc-in [:proxy] true))))))
+                                         (assoc-in [:proxy] true)))
+        (wrap-json-response)
+        ;; (wrap-json-body) ;; TODO
+        ;; (wrap-json-params) ;; TODO
+        )))
 
 ;; This is the main web handler, that builds routing middleware
 ;; from the application component (defined above). The handler is passed
@@ -187,13 +193,33 @@
              (assoc this :http-server nil))
            this)))
 
-(defn web-server
+(defrecord ApiServer [handler-fn server port ; parameters
+                      application            ; dependencies
+                      http-server shutdown]  ; state
+  component/Lifecycle
+  (start [this]
+         (if http-server
+           this
+           (assoc this
+                  :http-server (run-jetty (handler-fn application)
+                                          {:port port :join? false})
+                  :shutdown (promise))))
+  (stop  [this]
+         (if http-server
+           (do
+             ;; shutdown Jetty: call .stop on the server object:
+             (.stop http-server)
+             (deliver shutdown true)
+             (assoc this :http-server nil))
+           this)))
+
+(defn api-server
   "Return a WebServer component that depends on the application.
 
   The handler-fn is a function that accepts the application (Component) and
   returns a fully configured Ring handler (with middeware)."
   [handler-fn port]
-  (component/using (map->WebServer {:handler-fn handler-fn
+  (component/using (map->ApiServer {:handler-fn handler-fn
                                     :port port})
                    [:application]))
 
@@ -217,9 +243,12 @@
   ([port repl]
    (component/system-map :application (my-application {:repl repl})
                          :database    (db-manager/setup-database)
-                         :web-server  (web-server #'my-handler port))))
+                         ;; :web-server  (web-server #'my-handler port)
+                         :api-server (api-server #'my-handler port)
+                         )))
 
 (comment
+  ;; remote controller checkpoint
   (def system (new-system 8888))
   (alter-var-root #'system component/start)
   (alter-var-root #'system component/stop)

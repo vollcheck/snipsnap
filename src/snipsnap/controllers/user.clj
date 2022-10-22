@@ -22,9 +22,16 @@
   (let [data (assoc (:params req) :changes @changes)
         view (:application/view req "default")
         html (tmpl/render-file (str "views/user/" view ".html") data)]
-    (-> (resp/response (tmpl/render-file "layouts/default.html"
-                                         (assoc data :body [:safe html])))
-        (resp/content-type "text/html"))))
+
+    (-> (resp/response
+         ;; (tmpl/render-file "layouts/default.html"
+         ;;                   (assoc data :body [:safe html]))
+         {:a 1}
+         )
+        (resp/content-type
+         ;; "text/html"
+         "application/json"
+         ))))
 
 (defn reset-changes
   [req]
@@ -33,9 +40,11 @@
 
 (defn default
   [req]
-  (assoc-in req [:params :message]
+  (let [r (assoc-in req [:params :message]
                 (str "Welcome to the User Manager application demo! "
-                     "This uses just Compojure, Ring, and Selmer.")))
+                     "This uses just Compojure, Ring, and Selmer."))]
+    ;; (clojure.pprint/pprint r)
+    r))
 
 (defn delete-by-id
   "Compojure has already coerced the :id parameter to an int."
