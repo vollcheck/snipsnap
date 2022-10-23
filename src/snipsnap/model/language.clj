@@ -4,7 +4,7 @@
 
 (def ^:const initial-languages-data
   "Seed the snaps table with this data."
-  ["clojure" "javascript"])
+  ["Clojure" "JavaScript"])
 
 (defn get-language-by-id
   "Given a language ID, return the language record."

@@ -7,7 +7,9 @@
             [selmer.parser :as tmpl]
             [snipsnap.model.manager :as db-manager]
             [snipsnap.model.language :as language]
-            [snipsnap.model.user :as user]))
+            [snipsnap.model.user :as user]
+            [snipsnap.model.snap :as snap]
+            [snipsnap.utils :as u]))
 
 (def ^:private changes
   "Count the number of changes (since the last reload)."
@@ -32,6 +34,68 @@
          ;; "text/html"
          "application/json"
          ))))
+
+(defn user-profile
+  "Each handler function here adds :application/view to the request
+  data to indicate which view file they want displayed. This allows
+  us to put the rendering logic in one place instead of repeating it
+  for every handler."
+  [req]
+  (let [username (get-in req [:params :username])
+        db (get-in req [:application/component :database])
+        data (user/get-user-by-username db username)
+        data (if (vector? data)
+               (first data)
+               data)]
+    (-> (resp/response data)
+        (resp/content-type "application/json"))
+    ;; (wrap-json-body (resp/response data))
+    ))
+
+;; TODO: move that to snap namespace
+(defn create-snap
+  [req]
+  ;; (let [id (get-in req [:params :id])
+  ;;       db (get-in req [:application/component :database])
+  ;;       _ (prn id db)
+  ;;       data (snap/get-snap-by-id db id)
+  ;;       data (if (vector? data)
+  ;;              (first data)
+  ;;              data)]
+  ;;   (-> (resp/response data)
+  ;;       (resp/content-type "application/json"))
+  ;; (wrap-json-body (resp/response data)))
+  (let [db (get-in req [:application/component :database])
+        data (u/clean-entity-data "snap" (:json-params req))
+        result_id (->> data (snap/save-snap db) first second)]
+    (def req1 req) ;; TODO: remove
+    (-> (resp/response {:snap/id result_id})
+        (resp/content-type "application/json"))))
+
+;; TODO: move that to snap namespace
+(defn read-snap
+  [req]
+  (let [id (get-in req [:params :id])
+        db (get-in req [:application/component :database])
+        _ (prn id db)
+        data (snap/get-snap-by-id db id)
+        data (if (vector? data)
+               (first data)
+               data)]
+    (-> (resp/response data)
+        (resp/content-type "application/json"))
+    ;; (wrap-json-body (resp/response data))
+    ))
+
+;; TODO: move that to snap namespace
+(defn update-snap
+  [req]
+  )
+
+;; TODO: move that to snap namespace
+(defn delete-snap
+  [req]
+  )
 
 (defn reset-changes
   [req]

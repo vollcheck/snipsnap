@@ -30,7 +30,7 @@
   This example uses a local SQLite database to store data."
   (:require [com.stuartsierra.component :as component]
             [compojure.coercions :refer [as-int]]
-            [compojure.core :refer [GET POST let-routes]]
+            [compojure.core :refer [GET POST PUT DELETE let-routes]]
             [compojure.route :as route]
             ;; we use Jetty by default but if you want to use
             ;; http-kit instead, uncomment this line...
@@ -110,8 +110,8 @@
                                          ;; support load balancers
                                          (assoc-in [:proxy] true)))
         (wrap-json-response)
-        ;; (wrap-json-body) ;; TODO
-        ;; (wrap-json-params) ;; TODO
+        (wrap-json-body)
+        (wrap-json-params)
         )))
 
 ;; This is the main web handler, that builds routing middleware
@@ -134,19 +134,29 @@
   (let-routes [wrap (middleware-stack application #'my-middleware)]
     (GET  "/"                        []              (wrap #'user-ctl/default))
 
+    ;; user
+    (GET  "/:username"      [username]               (wrap #'user-ctl/user-profile))
+
+    ;; snap
+    (GET    "/:username/:id"  [username id] (wrap #'user-ctl/read-snap))
+    (PUT    "/:username/:id"  [username id] (wrap #'user-ctl/update-snap))
+    (POST   "/create-snap"    [] (wrap #'user-ctl/create-snap))
+    (DELETE "/:username/:id"  [username id] (wrap #'user-ctl/delete-snap))
+
+
     ;; horrible: application should POST to this URL!
-    (GET  "/user/delete/:id{[0-9]+}" [id :<< as-int] (wrap #'user-ctl/delete-by-id))
+    ;; (GET  "/user/delete/:id{[0-9]+}" [id :<< as-int] (wrap #'user-ctl/delete-by-id))
 
     ;; add a new user:
-    (GET  "/user/form"               []              (wrap #'user-ctl/edit))
+    ;; (GET  "/user/form"               []              (wrap #'user-ctl/edit))
 
     ;; edit an existing user:
-    (GET  "/user/form/:id{[0-9]+}"   [id :<< as-int] (wrap #'user-ctl/edit))
-    (GET  "/user/list"               []              (wrap #'user-ctl/get-users))
-    (POST "/user/save"               []              (wrap #'user-ctl/save))
+    ;; (GET  "/user/form/:id{[0-9]+}"   [id :<< as-int] (wrap #'user-ctl/edit))
+    ;; (GET  "/user/list"               []              (wrap #'user-ctl/get-users))
+    ;; (POST "/user/save"               []              (wrap #'user-ctl/save))
 
     ;; this just resets the change tracker but really should be a POST :)
-    (GET  "/reset"                   []              (wrap #'user-ctl/reset-changes))
+    ;; (GET  "/reset"                   []              (wrap #'user-ctl/reset-changes))
     (route/resources "/")
     (route/not-found "Not Found")))
 
@@ -255,7 +265,9 @@
 
   (def ds (get-in system [:database :datasource]))
 
-  (require '[next.jdbc :as jdbc])
+  (require '[next.jdbc :as jdbc]
+           '[next.jdbc.sql :as sql])
+  (sql/find-by-keys ds :user {:username "vollcheck"})
   (jdbc/execute-one! ds ["select * from user"]) ;; => #:user{:id 1,
 ;;           :username "vollcheck",
 ;;           :password "admin",

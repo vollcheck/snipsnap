@@ -14,6 +14,11 @@
   [db id]
   (sql/get-by-id (db) :user id))
 
+(defn get-user-by-username
+  "Given a user ID, return the user record."
+  [db username]
+  (sql/find-by-keys (db) :user {:username username}))
+
 (defn get-users
   "Return all available users, sorted by name."
   [db]

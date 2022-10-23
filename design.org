@@ -1,0 +1,63 @@
+notes on snipsnap database/routes design
+
+* MODELS
+** users
+   - id - id (auto)
+   - username - text
+   - password - text
+   - email - text
+   - avatar - bytes (optional)
+   - bio - text (optional, rich one?)
+
+** language
+   - id - id
+   - name - text
+
+** snaps
+   - id - id
+   - user_id - id - relation to user
+   - title - text
+   - content - text (rich one?)
+   - language_id - relation to language
+   - create_date - date - auto set
+   - update_date - date - auto set
+
+* ROUTES
+** AUTH
+   - /login
+   - /register - create user
+   - /password-reset (optional)
+   - /logout
+
+** GENERAL
+   - / - dashboard
+
+** USER
+	/<username> -
+                    GET: user profile + list of recent snaps
+
+                    POST:
+
+** SNAP
+	/<username>/<title> - specific snap - CRUD on snap entity
+                              title would need to be slugify
+                              not sure if useful if we have
+                              a frontend
+        /<username>/<id> - same as above (optional)
+
+** NOTES
+  - =find-by-keys= - super useful!
+    #+BEGIN_SRC clojure
+      (sql/find-by-keys (db) :snap {:name "hard computations"})
+    #+END_SRC
+
+** TASKS
+   - [ ] implement routes
+   - [ ] update tests
+   - [ ] `create-date` and `update-date` auto inserting
+   - [ ] ensure responses are wrapped as JSON in the middleware
+
+** EXTRA TASKS (that might be useful in general framework)
+   - [ ] make one abstract CRUD method for each entity
+   - [ ] make ability to load db seed data dynamically
+   - [ ] replace `println` with logging here and there

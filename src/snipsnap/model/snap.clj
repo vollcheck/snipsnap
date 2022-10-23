@@ -1,6 +1,7 @@
 (ns snipsnap.model.snap
   "Namespace for snap model persistence."
-  (:require [next.jdbc.sql :as sql]))
+  (:require [next.jdbc.sql :as sql]
+            [snipsnap.utils :refer [now]]))
 
 (def ^:const initial-snaps-data
   "Seed the snaps table with this data."
@@ -38,11 +39,39 @@ order by name
     (if (and id (not (zero? id)))
       ;; update
       (sql/update! (db) :snap
-                   (dissoc snap :snap/id)
+                   (-> snap
+                       (dissoc :snap/id)
+                       (assoc :update_date (now)))
                    {:id id})
       ;; insert
       (sql/insert! (db) :snap
-                   (dissoc snap :snap/id)))))
+                   (-> snap
+                       (dissoc :snap/id)
+                       (assoc :create_date (now)))))))
+
+(comment
+  (def example-snap
+    {"user_id" 1
+     "name" "hard computations"
+     "content" "(+ 1 2 3)"
+     "language_id" 1})
+
+  (def db
+    (-> snipsnap.controllers.user/req1 :application/component :database))
+
+  ;; NOTE: Super useful!
+  (sql/find-by-keys (db) :snap {:name "hard computations"})
+
+  (def r (save-snap db example-snap))
+  ;; => #:snap{:id 2,
+  ;;           :user_id 1,
+  ;;           :name "hard computations",
+  ;;           :content "(+ 1 2 3)",
+  ;;           :language_id 1,
+  ;;           :create_date "1666532055413",
+  ;;           :update_date nil}
+
+  )
 
 (defn delete-snap-by-id
   "Given a snap ID, delete that snap."

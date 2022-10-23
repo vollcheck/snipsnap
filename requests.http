@@ -1,0 +1,15 @@
+:json = Content-Type: application/json
+:url = http://localhost:8888
+
+###
+
+POST :url/create-snap
+:json
+
+{"snap/user_id": 1,
+ "snap/name": "sum of two integers",
+ "snap/content": "(defn sum [x y] (+ x y))",
+ "snap/language_id": 1
+ }
+
+###
