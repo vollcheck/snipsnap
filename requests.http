@@ -3,6 +3,11 @@
 
 ###
 
+GET :url/snap/5
+:json
+
+###
+
 POST :url/create-snap
 :json
 
@@ -13,3 +18,8 @@ POST :url/create-snap
  }
 
 ###
+
+DELETE :url/vollcheck/5
+:json
+
+##

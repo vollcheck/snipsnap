@@ -138,10 +138,10 @@
     (GET  "/:username"      [username]               (wrap #'user-ctl/user-profile))
 
     ;; snap
-    (GET    "/:username/:id"  [username id] (wrap #'user-ctl/read-snap))
-    (PUT    "/:username/:id"  [username id] (wrap #'user-ctl/update-snap))
-    (POST   "/create-snap"    [] (wrap #'user-ctl/create-snap))
-    (DELETE "/:username/:id"  [username id] (wrap #'user-ctl/delete-snap))
+    (GET    "/snap/:id"     [id] (wrap #'user-ctl/read-snap))
+    (PUT    "/snap/:id"     [id] (wrap #'user-ctl/update-snap))
+    (POST   "/snap/create"  [] (wrap #'user-ctl/create-snap))
+    (DELETE "/snap/:id"     [id] (wrap #'user-ctl/delete-snap))
 
 
     ;; horrible: application should POST to this URL!

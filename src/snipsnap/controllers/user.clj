@@ -55,20 +55,9 @@
 ;; TODO: move that to snap namespace
 (defn create-snap
   [req]
-  ;; (let [id (get-in req [:params :id])
-  ;;       db (get-in req [:application/component :database])
-  ;;       _ (prn id db)
-  ;;       data (snap/get-snap-by-id db id)
-  ;;       data (if (vector? data)
-  ;;              (first data)
-  ;;              data)]
-  ;;   (-> (resp/response data)
-  ;;       (resp/content-type "application/json"))
-  ;; (wrap-json-body (resp/response data)))
   (let [db (get-in req [:application/component :database])
         data (u/clean-entity-data "snap" (:json-params req))
         result_id (->> data (snap/save-snap db) first second)]
-    (def req1 req) ;; TODO: remove
     (-> (resp/response {:snap/id result_id})
         (resp/content-type "application/json"))))
 
@@ -77,25 +66,27 @@
   [req]
   (let [id (get-in req [:params :id])
         db (get-in req [:application/component :database])
-        _ (prn id db)
         data (snap/get-snap-by-id db id)
         data (if (vector? data)
                (first data)
                data)]
     (-> (resp/response data)
-        (resp/content-type "application/json"))
-    ;; (wrap-json-body (resp/response data))
-    ))
+        (resp/content-type "application/json"))))
 
 ;; TODO: move that to snap namespace
 (defn update-snap
   [req]
+
   )
 
 ;; TODO: move that to snap namespace
 (defn delete-snap
   [req]
-  )
+  (let [id (get-in req [:params :id])
+        db (get-in req [:application/component :database])
+        result (snap/delete-snap-by-id db id)]
+    (-> (resp/response result)
+        (resp/content-type "application/json"))))
 
 (defn reset-changes
   [req]

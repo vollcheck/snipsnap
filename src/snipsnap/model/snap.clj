@@ -49,7 +49,13 @@ order by name
                        (dissoc :snap/id)
                        (assoc :create_date (now)))))))
 
+(defn delete-snap-by-id
+  "Given a snap ID, delete that snap."
+  [db id]
+  (sql/delete! (db) :snap {:id id}))
+
 (comment
+  ;; NOTE: You could just make a tests out of that
   (def example-snap
     {"user_id" 1
      "name" "hard computations"
@@ -72,8 +78,3 @@ order by name
   ;;           :update_date nil}
 
   )
-
-(defn delete-snap-by-id
-  "Given a snap ID, delete that snap."
-  [db id]
-  (sql/delete! (db) :snap {:id id}))
