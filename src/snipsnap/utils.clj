@@ -7,5 +7,8 @@
 (defn clean-entity-data
   [entity-name data]
   (->> data
-       (map (fn [[k v]] [(str/replace k (str entity-name "/") "") v]))
+       (map (fn [[k v]] [(-> k
+                            (str/replace (str entity-name "/") "")
+                            keyword)
+                        v]))
        (into {})))

@@ -139,8 +139,7 @@
 
     ;; snap
     (GET    "/snap/:id"     [id] (wrap #'user-ctl/read-snap))
-    (PUT    "/snap/:id"     [id] (wrap #'user-ctl/update-snap))
-    (POST   "/snap/create"  [] (wrap #'user-ctl/create-snap))
+    (POST   "/snap/create"  []   (wrap #'user-ctl/create-or-update-snap))
     (DELETE "/snap/:id"     [id] (wrap #'user-ctl/delete-snap))
 
 

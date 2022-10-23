@@ -35,18 +35,18 @@ order by name
   "Save a snap record. If ID is present and not zero, then
   this is an update operation, otherwise it's an insert."
   [db snap]
-  (let [id (:snap/id snap)]
+  (let [id (:id snap)]
     (if (and id (not (zero? id)))
       ;; update
       (sql/update! (db) :snap
                    (-> snap
-                       (dissoc :snap/id)
+                       (dissoc :id)
                        (assoc :update_date (now)))
                    {:id id})
       ;; insert
       (sql/insert! (db) :snap
                    (-> snap
-                       (dissoc :snap/id)
+                       (dissoc :id)
                        (assoc :create_date (now)))))))
 
 (defn delete-snap-by-id
@@ -56,6 +56,17 @@ order by name
 
 (comment
   ;; NOTE: You could just make a tests out of that
+
+  (def example-snap2
+    {"snap/id" 2
+     "snap/user_id" 1
+     "snap/name" "hard computations"
+     "snap/content" "(+ 1 2 3)"
+     "snap/language_id" 1})
+
+  (require '[snipsnap.utils :refer [clean-entity-data]])
+  (save-snap db (clean-entity-data "snap" example-snap2))
+
   (def example-snap
     {"user_id" 1
      "name" "hard computations"
@@ -67,6 +78,7 @@ order by name
 
   ;; NOTE: Super useful!
   (sql/find-by-keys (db) :snap {:name "hard computations"})
+  (sql/delete! (db) :snap {:id 1337})
 
   (def r (save-snap db example-snap))
   ;; => #:snap{:id 2,

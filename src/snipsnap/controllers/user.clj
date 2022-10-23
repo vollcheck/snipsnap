@@ -53,13 +53,12 @@
     ))
 
 ;; TODO: move that to snap namespace
-(defn create-snap
+(defn create-or-update-snap
   [req]
   (let [db (get-in req [:application/component :database])
         data (u/clean-entity-data "snap" (:json-params req))
         result_id (->> data (snap/save-snap db) first second)]
-    (-> (resp/response {:snap/id result_id})
-        (resp/content-type "application/json"))))
+    (resp/response {:snap/id result_id})))
 
 ;; TODO: move that to snap namespace
 (defn read-snap
@@ -84,9 +83,11 @@
   [req]
   (let [id (get-in req [:params :id])
         db (get-in req [:application/component :database])
-        result (snap/delete-snap-by-id db id)]
-    (-> (resp/response result)
-        (resp/content-type "application/json"))))
+        result (:next.jdbc/update-count (snap/delete-snap-by-id db id))
+        message (if (= result 0)
+                  (str "Can't delete snap with id " id ", doesn't exist")
+                  (str "Sucessfully deteled snap with id " id))]
+    (resp/response {:message message})))
 
 (defn reset-changes
   [req]
