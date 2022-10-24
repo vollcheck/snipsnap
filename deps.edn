@@ -4,16 +4,22 @@
         com.github.seancorfield/next.jdbc {:mvn/version "1.1.646"}
         com.stuartsierra/component {:mvn/version "1.0.0"}
 
+        ;; API
         compojure/compojure {:mvn/version "1.6.2"}
         ring/ring {:mvn/version "1.9.2"}
         ring/ring-defaults {:mvn/version "0.3.2"}
         ring/ring-json {:mvn/version "0.5.1"}
 
+        ;; authorization & authentication
+        buddy/buddy-auth {:mvn/version "3.0.323"}
+        buddy/buddy-hashers {:mvn/version "1.8.158"}
+
+        ;; TODO: to remove
         selmer/selmer {:mvn/version "1.12.33"}
 
         org.xerial/sqlite-jdbc {:mvn/version "3.34.0"}
 
-        ;; just for a moment, testing the tests
+        ;; TODO: just for a moment, testing the tests
         com.h2database/h2 {:mvn/version "1.4.200"}
         }
  :aliases

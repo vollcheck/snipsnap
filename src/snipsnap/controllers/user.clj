@@ -3,12 +3,9 @@
 (ns snipsnap.controllers.user
   "The main controller for the user management portion of this app."
   (:require [ring.util.response :as resp]
-            [ring.middleware.json :refer [wrap-json-response wrap-json-body]]
             [selmer.parser :as tmpl]
-            [snipsnap.model.manager :as db-manager]
             [snipsnap.model.language :as language]
             [snipsnap.model.user :as user]
-            [snipsnap.model.snap :as snap]
             [snipsnap.utils :as u]))
 
 (def ^:private changes
@@ -35,11 +32,8 @@
          "application/json"
          ))))
 
-(defn user-profile
-  "Each handler function here adds :application/view to the request
-  data to indicate which view file they want displayed. This allows
-  us to put the rendering logic in one place instead of repeating it
-  for every handler."
+(defn read-user
+  "User profile view."
   [req]
   (let [username (get-in req [:params :username])
         db (get-in req [:application/component :database])
@@ -47,47 +41,7 @@
         data (if (vector? data)
                (first data)
                data)]
-    (-> (resp/response data)
-        (resp/content-type "application/json"))
-    ;; (wrap-json-body (resp/response data))
-    ))
-
-;; TODO: move that to snap namespace
-(defn create-or-update-snap
-  [req]
-  (let [db (get-in req [:application/component :database])
-        data (u/clean-entity-data "snap" (:json-params req))
-        result_id (->> data (snap/save-snap db) first second)]
-    (resp/response {:snap/id result_id})))
-
-;; TODO: move that to snap namespace
-(defn read-snap
-  [req]
-  (let [id (get-in req [:params :id])
-        db (get-in req [:application/component :database])
-        data (snap/get-snap-by-id db id)
-        data (if (vector? data)
-               (first data)
-               data)]
-    (-> (resp/response data)
-        (resp/content-type "application/json"))))
-
-;; TODO: move that to snap namespace
-(defn update-snap
-  [req]
-
-  )
-
-;; TODO: move that to snap namespace
-(defn delete-snap
-  [req]
-  (let [id (get-in req [:params :id])
-        db (get-in req [:application/component :database])
-        result (:next.jdbc/update-count (snap/delete-snap-by-id db id))
-        message (if (= result 0)
-                  (str "Can't delete snap with id " id ", doesn't exist")
-                  (str "Sucessfully deteled snap with id " id))]
-    (resp/response {:message message})))
+    (resp/response data)))
 
 (defn reset-changes
   [req]

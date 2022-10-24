@@ -42,6 +42,7 @@
                                           wrap-json-params]]
             [ring.util.response :as resp]
             [snipsnap.controllers.user :as user-ctl]
+            [snipsnap.controllers.snap :as snap-ctl]
             [snipsnap.model.manager :as db-manager])
   (:gen-class))
 
@@ -138,10 +139,9 @@
     (GET  "/:username"      [username]               (wrap #'user-ctl/user-profile))
 
     ;; snap
-    (GET    "/snap/:id"     [id] (wrap #'user-ctl/read-snap))
-    (POST   "/snap/create"  []   (wrap #'user-ctl/create-or-update-snap))
-    (DELETE "/snap/:id"     [id] (wrap #'user-ctl/delete-snap))
-
+    (GET    "/snap/:id"     [id :<< as-int] (wrap #'snap-ctl/read-snap))
+    (POST   "/snap/create"  []   (wrap #'snap-ctl/create-or-update-snap))
+    (DELETE "/snap/:id"     [id :<< as-int] (wrap #'snap-ctl/delete-snap))
 
     ;; horrible: application should POST to this URL!
     ;; (GET  "/user/delete/:id{[0-9]+}" [id :<< as-int] (wrap #'user-ctl/delete-by-id))
@@ -231,6 +231,8 @@
   (component/using (map->ApiServer {:handler-fn handler-fn
                                     :port port})
                    [:application]))
+
+
 
 ;; This is the piece that combines the generic web server component above with
 ;; your application-specific component defined at the top of the file, and

@@ -3,7 +3,7 @@
 
 ###
 
-GET :url/snap/5
+GET :url/snap/2
 :json
 
 ###
@@ -15,21 +15,19 @@ POST :url/create-snap
  "snap/user_id": 1,
  "snap/name": "just a comment",
  "snap/content": "(comment)",
- "snap/language_id": 1
- }
+ "snap/language_id": 1}
 
-### field update
+###
 
 POST :url/create-snap
 :json
 
 {"snap/id": 2,
- "snap/name": "IT'S JUST A COMMENT, OKAY?"
- }
+ "snap/name": "IT'S JUST A COMMENT, OKAY?"}
 
 ###
 
 DELETE :url/vollcheck/5
 :json
 
-##
+###

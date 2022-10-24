@@ -52,10 +52,17 @@ notes on snipsnap database/routes design
     #+END_SRC
 
 ** TASKS
+   - [ ] auth: https://github.com/kelvin-mai/clj-auth/blob/clj-auth-snapshot/src/auth/utils.clj
+   - [ ] data validation
    - [ ] implement routes
-   - [ ] update tests
-   - [ ] `create-date` and `update-date` auto inserting
-   - [ ] ensure responses are wrapped as JSON in the middleware
+   - [ ] snap tests (controller/model)
+   - [ ] user tests (controller/model)
+   - [ ] language tests (controller/model)
+   - [ ] language controller
+   - [X] language model
+   - [X] `create-date` and `update-date` auto inserting
+   - [X] snap controller / crud
+   - [X] ensure responses are wrapped as JSON in the middleware
 
 ** EXTRA TASKS (that might be useful in general framework)
    - [ ] make one abstract CRUD method for each entity
