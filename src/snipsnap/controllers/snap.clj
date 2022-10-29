@@ -6,7 +6,7 @@
 (defn create-or-update-snap
   [req]
   (let [db (get-in req [:application/component :database])
-        data (clean-entity-data "snap" (:json-params req))
+        data (clean-entity-data (:json-params req))
         result_id (->> data (snap/save-snap db) first second)]
     (response {:snap/id result_id})))
 

@@ -5,10 +5,9 @@
   (new java.util.Date))
 
 (defn clean-entity-data
-  [entity-name data]
-  (->> data
-       (map (fn [[k v]] [(-> k
-                            (str/replace (str entity-name "/") "")
-                            keyword)
-                        v]))
-       (into {})))
+  [data]
+  (let [ns-len (-> data keys first (str/index-of "/") inc)]
+    (->> data
+         (map (fn [[k v]] [(keyword (subs k ns-len))
+                          v]))
+         (into {}))))

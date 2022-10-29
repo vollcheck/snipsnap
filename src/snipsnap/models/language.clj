@@ -15,7 +15,8 @@
 (defn get-languages
   "Return all available language records (in order)."
   [db]
-  (sql/query (db) (hsql/format {:select :* :from :language :order-by [:name]} {:inline true})))
+  (sql/query (db) (hsql/format {:select :* :from :language :order-by [:name]}
+                               {:inline true})))
 
 (defn save-language
   "Save a language record. If ID is present and not zero, then
