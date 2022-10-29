@@ -10,7 +10,7 @@
 (defn get-language-by-id
   "Given a language ID, return the language record."
   [db id]
-  (sql/get-by-id (db) :lang id))
+  (sql/get-by-id (db) :language id))
 
 (defn get-languages
   "Return all available language records (in order)."

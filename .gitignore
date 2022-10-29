@@ -6,3 +6,5 @@
 /.socket-repl-port
 /target
 /db.sqlite
+/db-test.sqlite
+/playground.clj

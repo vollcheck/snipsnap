@@ -54,14 +54,14 @@ notes on snipsnap database/routes design
 ;; NOTE: You can test requests like in https://www.youtube.com/watch?v=FcxO5VCPLi4&t=330s
 
 ** TASKS
-   - [ ] get users by the date of creation - add this field at first
    - [ ] snap tests (controller/model)
    - [ ] user tests (controller/model)
    - [ ] language tests (model)
-   - [ ] refactor sql queries with honeysql
+   - [X] refactor sql queries with honeysql
    - [ ] auth: https://github.com/kelvin-mai/clj-auth/blob/clj-auth-snapshot/src/auth/utils.clj
    - [ ] data validation - to elaborate more on that
-   - [ ] implement routes
+   - [X] implement routes
+   - [ ] get users by the date of creation - add this field at first
    - [X] language model
    - [X] `create-date` and `update-date` auto inserting
    - [X] snap controller / crud

@@ -9,7 +9,7 @@
 
 ;; our database connection and initial data
 
-(def ^:private db-spec
+(def ^:private ^:const db-spec
   "SQLite database connection spec."
   {:dbtype "sqlite" :dbname "db.sqlite"})
 
@@ -91,5 +91,3 @@ create table user (
   (invoke [_] datasource))
 
 (defn setup-database [] (map->Database {:db-spec db-spec}))
-
-;; NOTE: data model access functions are available in particular namespaces

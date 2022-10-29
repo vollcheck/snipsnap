@@ -1,2 +1,2 @@
 (ns snipsnap.controllers.language-test
-  (:require [snipsnap.controllers.language :refer :all]))
+  (:require [snipsnap.controllers.language]))

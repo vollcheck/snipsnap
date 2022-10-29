@@ -1,2 +1,2 @@
 (ns snipsnap.controllers.snap-test
-  (:require [snipsnap.controllers.snap :refer :all]))
+  (:require [snipsnap.controllers.snap]))
