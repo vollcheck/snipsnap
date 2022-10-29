@@ -3,9 +3,9 @@
   (:require [com.stuartsierra.component :as component]
             [next.jdbc :as jdbc]
             [next.jdbc.sql :as sql]
-            [snipsnap.model.language :as language]
-            [snipsnap.model.user :as user]
-            [snipsnap.model.snap :as snap]))
+            [snipsnap.models.language :as language]
+            [snipsnap.models.user :as user]
+            [snipsnap.models.snap :as snap]))
 
 ;; our database connection and initial data
 

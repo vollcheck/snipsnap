@@ -29,5 +29,5 @@
         result (:next.jdbc/update-count (user/delete-user-by-username db username))
         message (if (= result 0)
                   (str "Can't delete user with username " username ", doesn't exist")
-                  (str "Sucessfully deteled snap with username " username))]
+                  (str "Sucessfully deleted snap with username " username))]
     (response {:message message})))

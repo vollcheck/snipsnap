@@ -8,13 +8,12 @@ GET :url/snap/2
 
 ###
 
-POST :url/snap/create
+POST :url/snap/
 :json
 
-{"snap/id": 2,
- "snap/user_id": 1,
- "snap/name": "just a comment",
- "snap/content": "(comment)",
+{"snap/user_id": 1,
+ "snap/name": "just a comment another one",
+ "snap/content": "(commentfdajslfdsajlfdajslf)",
  "snap/language_id": 1}
 
 ###
@@ -29,7 +28,7 @@ POST :url/snap/
 
 ###
 
-DELETE :url/snap/5
+DELETE :url/snap/6
 :json
 
 ###

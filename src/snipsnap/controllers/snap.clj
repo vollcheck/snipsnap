@@ -27,5 +27,14 @@
         result (:next.jdbc/update-count (snap/delete-snap-by-id db id))
         message (if (= result 0)
                   (str "Can't delete snap with id " id ", doesn't exist")
-                  (str "Sucessfully deteled snap with id " id))]
+                  (str "Sucessfully deleted snap with id " id))]
     (response {:message message})))
+
+(comment
+  (def db (get snipsnap.main/system :database))
+  (def data {:user_id 1,
+             :name "just a comment another one",
+             :content "(commentfdajslfdsajlfdajslf)",
+             :language_id 1})
+  (snap/save-snap ds data)
+  )

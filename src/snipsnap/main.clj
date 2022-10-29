@@ -45,7 +45,7 @@
             [snipsnap.controllers.core :as core-ctl]
             [snipsnap.controllers.user :as user-ctl]
             [snipsnap.controllers.snap :as snap-ctl]
-            [snipsnap.model.manager :as db-manager])
+            [snipsnap.models.manager :as db-manager])
   (:gen-class))
 
 ;; Implement your application's lifecycle here:
@@ -86,7 +86,7 @@
     (let [resp (handler req)]
       (if (resp/response? resp)
         resp
-        (user-ctl/render-page resp)))))
+        "no response"))))
 
 ;; Helper for building the middleware:
 (defn- add-app-component
@@ -139,19 +139,19 @@
     (GET  "/"                [] (wrap #'core-ctl/dashboard))
 
     ;; auth
-    (POST   "/register"       [username] (wrap #'auth-ctl/register)) ;; TODO
-    (POST   "/login"          [username] (wrap #'auth-ctl/login)) ;; TODO
-    (POST   "/logout"         [username] (wrap #'auth-ctl/logout)) ;; TODO
+    (POST   "/register"       [] (wrap #'auth-ctl/register)) ;; TODO
+    (POST   "/login"          [] (wrap #'auth-ctl/login)) ;; TODO
+    (POST   "/logout"         [] (wrap #'auth-ctl/logout)) ;; TODO
 
     ;; user
-    (GET    "/user/:username" [username] (wrap #'user-ctl/read-user))
-    (POST   "/user/:username" [username] (wrap #'user-ctl/create-or-update-user))
-    (DELETE "/user/:username" [username] (wrap #'user-ctl/delete-user))
+    (GET    "/user/:username" [_] (wrap #'user-ctl/read-user))
+    (POST   "/user/"          [_] (wrap #'user-ctl/create-or-update-user))
+    (DELETE "/user/:username" [_] (wrap #'user-ctl/delete-user))
     ;; TODO: list of users?
 
     ;; snap
     (GET    "/snap/:id"     [id :<< as-int] (wrap #'snap-ctl/read-snap))
-    (POST   "/snap"         []              (wrap #'snap-ctl/create-or-update-snap))
+    (POST   "/snap/"        []              (wrap #'snap-ctl/create-or-update-snap))
     (DELETE "/snap/:id"     [id :<< as-int] (wrap #'snap-ctl/delete-snap))
     ;; TODO: list of snaps?
 
