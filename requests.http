@@ -8,7 +8,7 @@ GET :url/snap/2
 
 ###
 
-POST :url/create-snap
+POST :url/snap/create
 :json
 
 {"snap/id": 2,

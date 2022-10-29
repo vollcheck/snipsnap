@@ -52,13 +52,13 @@ notes on snipsnap database/routes design
     #+END_SRC
 
 ** TASKS
-   - [ ] auth: https://github.com/kelvin-mai/clj-auth/blob/clj-auth-snapshot/src/auth/utils.clj
-   - [ ] data validation
-   - [ ] implement routes
    - [ ] snap tests (controller/model)
    - [ ] user tests (controller/model)
-   - [ ] language tests (controller/model)
-   - [ ] language controller
+   - [ ] language tests (model)
+   - [ ] refactor sql queries with honeysql
+   - [ ] auth: https://github.com/kelvin-mai/clj-auth/blob/clj-auth-snapshot/src/auth/utils.clj
+   - [ ] data validation - to elaborate more on that
+   - [ ] implement routes
    - [X] language model
    - [X] `create-date` and `update-date` auto inserting
    - [X] snap controller / crud

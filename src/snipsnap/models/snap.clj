@@ -1,6 +1,7 @@
-(ns snipsnap.model.snap
+(ns snipsnap.models.snap
   "Namespace for snap model persistence."
   (:require [next.jdbc.sql :as sql]
+            [honey.sql :as hsql]
             [snipsnap.utils :refer [now]]))
 
 (def ^:const initial-snaps-data
@@ -23,13 +24,20 @@
 
   snap/id, snap/name, etc, language/name, user/username"
   [db]
-  (sql/query (db) ["
-select s.*, l.name, u.username
+  (sql/query (db) ["select s.*, l.name, u.username
  from snap s
  left join language l on s.language_id = l.id
  left join user u on s.user_id = u.id
-order by name
-"]))
+order by name"]))
+
+(comment
+  ;; TODO
+  (let [query {:select [:s.* :l.name :u.username]
+               :from [[:snap :s] [:language :l] [:user :u]]
+               :left-join [[:= :s.user_id :u.id] [:= :s.language_id :l.id]]
+               :order-by [:s.name]}]
+    (hsql/format query {:inline true}))
+  )
 
 (defn save-snap
   "Save a snap record. If ID is present and not zero, then

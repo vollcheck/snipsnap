@@ -1,6 +1,4 @@
-;; copyright (c) 2019-2022 Sean Corfield, all rights reserved
-
-(ns snipsnap.model.manager
+(ns snipsnap.models.manager
   "The model for the application."
   (:require [com.stuartsierra.component :as component]
             [next.jdbc :as jdbc]

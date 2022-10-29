@@ -1,6 +1,7 @@
-(ns snipsnap.model.user
+(ns snipsnap.models.user
   "Namespace for user model persistence."
-  (:require [next.jdbc.sql :as sql]))
+  (:require [next.jdbc.sql :as sql]
+            [honey.sql :as hsql]))
 
 (def ^:const initial-user-data
   "Seed the user table with this data."
@@ -22,12 +23,11 @@
 (defn get-users
   "Return all available users, sorted by name."
   [db]
-  (sql/query (db)
-             ["
-select *
- from user
- order by username
-"]))
+  ;; NOTE: what about get users by date of creation?
+  (let [query {:select [:*]
+               :from [:user]
+               :order-by [:username]}]
+    (sql/query (db) (hsql/format query :inline true))))
 
 (defn save-user
   "Save a user record. If ID is present and not zero, then
@@ -43,7 +43,7 @@ select *
       (sql/insert! (db) :user
                    (dissoc user :user/id)))))
 
-(defn delete-user-by-id
+(defn delete-user-by-username
   "Given a user ID, delete that user."
-  [db id]
-  (sql/delete! (db) :user {:id id}))
+  [db username]
+  (sql/delete! (db) :user {:username username}))

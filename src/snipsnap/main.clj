@@ -30,7 +30,7 @@
   This example uses a local SQLite database to store data."
   (:require [com.stuartsierra.component :as component]
             [compojure.coercions :refer [as-int]]
-            [compojure.core :refer [GET POST PUT DELETE let-routes]]
+            [compojure.core :refer [GET POST DELETE let-routes]]
             [compojure.route :as route]
             ;; we use Jetty by default but if you want to use
             ;; http-kit instead, uncomment this line...
@@ -41,6 +41,8 @@
             [ring.middleware.json :refer [wrap-json-response wrap-json-body
                                           wrap-json-params]]
             [ring.util.response :as resp]
+            [snipsnap.controllers.auth :as auth-ctl]
+            [snipsnap.controllers.core :as core-ctl]
             [snipsnap.controllers.user :as user-ctl]
             [snipsnap.controllers.snap :as snap-ctl]
             [snipsnap.model.manager :as db-manager])
@@ -133,15 +135,25 @@
   need to define our route handlers so that they can be parameterized."
   [application]
   (let-routes [wrap (middleware-stack application #'my-middleware)]
-    (GET  "/"                        []              (wrap #'user-ctl/default))
+    ;; dashboard
+    (GET  "/"                [] (wrap #'core-ctl/dashboard))
+
+    ;; auth
+    (POST   "/register"       [username] (wrap #'auth-ctl/register)) ;; TODO
+    (POST   "/login"          [username] (wrap #'auth-ctl/login)) ;; TODO
+    (POST   "/logout"         [username] (wrap #'auth-ctl/logout)) ;; TODO
 
     ;; user
-    (GET  "/:username"      [username]               (wrap #'user-ctl/user-profile))
+    (GET    "/user/:username" [username] (wrap #'user-ctl/read-user))
+    (POST   "/user/:username" [username] (wrap #'user-ctl/create-or-update-user))
+    (DELETE "/user/:username" [username] (wrap #'user-ctl/delete-user))
+    ;; TODO: list of users?
 
     ;; snap
     (GET    "/snap/:id"     [id :<< as-int] (wrap #'snap-ctl/read-snap))
     (POST   "/snap/create"  []   (wrap #'snap-ctl/create-or-update-snap))
     (DELETE "/snap/:id"     [id :<< as-int] (wrap #'snap-ctl/delete-snap))
+    ;; TODO: list of snaps?
 
     ;; horrible: application should POST to this URL!
     ;; (GET  "/user/delete/:id{[0-9]+}" [id :<< as-int] (wrap #'user-ctl/delete-by-id))

@@ -1,6 +1,7 @@
-(ns snipsnap.model.language
+(ns snipsnap.models.language
   "Namespace for language model persistence."
-  (:require [next.jdbc.sql :as sql]))
+  (:require [next.jdbc.sql :as sql]
+            [honey.sql :as hsql]))
 
 (def ^:const initial-languages-data
   "Seed the snaps table with this data."
@@ -14,7 +15,7 @@
 (defn get-languages
   "Return all available language records (in order)."
   [db]
-  (sql/query (db) ["select * from language order by name"]))
+  (sql/query (db) (hsql/format {:select :* :from :language :order-by [:name]} {:inline true})))
 
 (defn save-language
   "Save a language record. If ID is present and not zero, then
