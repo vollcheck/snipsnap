@@ -1,6 +1,6 @@
 (ns snipsnap.controllers.snap
   (:require [ring.util.response :refer [response]]
-            [snipsnap.model.snap :as snap]
+            [snipsnap.models.snap :as snap]
             [snipsnap.utils :refer [clean-entity-data]]))
 
 (defn create-or-update-snap

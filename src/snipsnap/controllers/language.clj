@@ -1,12 +1,12 @@
 (ns snipsnap.controllers.language
   (:require [ring.util.response :as resp]
-            [snipsnap.model.language :as language]
-            [snipsnap.utils :as u]))
+            [snipsnap.models.language :as language]
+            [snipsnap.utils :refer [clean-entity-data]]))
 
 (defn create-or-update-language
   [req]
   (let [db (get-in req [:application/component :database])
-        data (u/clean-entity-data "language" (:json-params req))
+        data (clean-entity-data (:json-params req))
         result_id (->> data (language/save-language db) first second)]
     (resp/response {:snap/id result_id})))
 

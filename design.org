@@ -51,7 +51,10 @@ notes on snipsnap database/routes design
       (sql/find-by-keys (db) :snap {:name "hard computations"})
     #+END_SRC
 
+;; NOTE: You can test requests like in https://www.youtube.com/watch?v=FcxO5VCPLi4&t=330s
+
 ** TASKS
+   - [ ] get users by the date of creation - add this field at first
    - [ ] snap tests (controller/model)
    - [ ] user tests (controller/model)
    - [ ] language tests (model)
@@ -66,5 +69,5 @@ notes on snipsnap database/routes design
 
 ** EXTRA TASKS (that might be useful in general framework)
    - [ ] make one abstract CRUD method for each entity
-   - [ ] make ability to load db seed data dynamically
+   - [ ] make ability to load db seed data dynamically (eg. from file)
    - [ ] replace `println` with logging here and there

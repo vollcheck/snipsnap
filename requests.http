@@ -19,7 +19,9 @@ POST :url/snap/create
 
 ###
 
-POST :url/create-snap
+# snap update, not create
+
+POST :url/snap/
 :json
 
 {"snap/id": 2,
@@ -27,7 +29,7 @@ POST :url/create-snap
 
 ###
 
-DELETE :url/vollcheck/5
+DELETE :url/snap/5
 :json
 
 ###

@@ -1,14 +1,14 @@
 (ns snipsnap.controllers.user
   "The main controller for the user management portion of this app."
   (:require [ring.util.response :refer [response]]
-            [snipsnap.model.user :as user]
+            [snipsnap.models.user :as user]
             [snipsnap.utils :refer [clean-entity-data]]))
 
 (defn create-or-update-user
   [req]
   (let [db (get-in req [:application/component :database])
-        data (clean-entity-data "user" (:json-params req))
-        result_id (->> data (snap/user-snap db) first second)]
+        data (clean-entity-data (:json-params req))
+        result_id (->> data (user/save-user db) first second)]
     (response {:snap/id result_id})))
 
 (defn read-user

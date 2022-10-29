@@ -151,7 +151,7 @@
 
     ;; snap
     (GET    "/snap/:id"     [id :<< as-int] (wrap #'snap-ctl/read-snap))
-    (POST   "/snap/create"  []   (wrap #'snap-ctl/create-or-update-snap))
+    (POST   "/snap"         []              (wrap #'snap-ctl/create-or-update-snap))
     (DELETE "/snap/:id"     [id :<< as-int] (wrap #'snap-ctl/delete-snap))
     ;; TODO: list of snaps?
 

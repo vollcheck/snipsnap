@@ -30,15 +30,6 @@
  left join user u on s.user_id = u.id
 order by name"]))
 
-(comment
-  ;; TODO
-  (let [query {:select [:s.* :l.name :u.username]
-               :from [[:snap :s] [:language :l] [:user :u]]
-               :left-join [[:= :s.user_id :u.id] [:= :s.language_id :l.id]]
-               :order-by [:s.name]}]
-    (hsql/format query {:inline true}))
-  )
-
 (defn save-snap
   "Save a snap record. If ID is present and not zero, then
   this is an update operation, otherwise it's an insert."
@@ -62,39 +53,12 @@ order by name"]))
   [db id]
   (sql/delete! (db) :snap {:id id}))
 
+
 (comment
-  ;; NOTE: You could just make a tests out of that
-
-  (def example-snap2
-    {"snap/id" 2
-     "snap/user_id" 1
-     "snap/name" "hard computations"
-     "snap/content" "(+ 1 2 3)"
-     "snap/language_id" 1})
-
-  (require '[snipsnap.utils :refer [clean-entity-data]])
-  (save-snap db (clean-entity-data "snap" example-snap2))
-
-  (def example-snap
-    {"user_id" 1
-     "name" "hard computations"
-     "content" "(+ 1 2 3)"
-     "language_id" 1})
-
-  (def db
-    (-> snipsnap.controllers.user/req1 :application/component :database))
-
-  ;; NOTE: Super useful!
-  (sql/find-by-keys (db) :snap {:name "hard computations"})
-  (sql/delete! (db) :snap {:id 1337})
-
-  (def r (save-snap db example-snap))
-  ;; => #:snap{:id 2,
-  ;;           :user_id 1,
-  ;;           :name "hard computations",
-  ;;           :content "(+ 1 2 3)",
-  ;;           :language_id 1,
-  ;;           :create_date "1666532055413",
-  ;;           :update_date nil}
-
+  ;; TODO - transform this `SELECT` with leftjoins to honeysql
+  (let [query {:select [:s.* :l.name :u.username]
+               :from [[:snap :s] [:language :l] [:user :u]]
+               :left-join [[:= :s.user_id :u.id] [:= :s.language_id :l.id]]
+               :order-by [:s.name]}]
+    (hsql/format query {:inline true}))
   )
