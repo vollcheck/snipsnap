@@ -23,7 +23,7 @@
 
   (testing "update existing language"
     (let [result (l/save-language @test-db {:language/id 3
-                                                  :language/name "Haskell"})]
+                                            :language/name "Haskell"})]
       (is (= 1 (:next.jdbc/update-count result)))))
 
   (testing "remove existing language"
