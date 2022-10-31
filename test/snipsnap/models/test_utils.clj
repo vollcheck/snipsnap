@@ -1,10 +1,15 @@
 (ns snipsnap.models.test-utils
+  "Tests use H2 in-memory."
   (:require [com.stuartsierra.component :as component]
             [next.jdbc :as jdbc]
             [snipsnap.models.manager :as db-manager]))
 
-(def ^:private db-spec {:dbtype "sqlite"
+#_(def ^:private db-spec {:dbtype "sqlite"
                         :dbname "db-test.sqlite"
+                        :database_to_upper false})
+
+(def ^:private db-spec {:dbtype "h2:mem"
+                        :dbname "snipsnap_test"
                         :database_to_upper false})
 
 (def test-db (atom nil))
