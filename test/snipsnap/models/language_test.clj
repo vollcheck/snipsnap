@@ -5,7 +5,7 @@
 
 (use-fixtures :once with-test-db)
 
-(deftest language-test
+(deftest language-model-test
   (testing "standard language get"
     (is (= #:language{:id 1 :name "Clojure"}
            (l/get-language-by-id @test-db 1))))
