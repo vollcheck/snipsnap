@@ -7,39 +7,40 @@
 
 (deftest user-model-test
   (testing "standard get user by id or by username"
-    (let [ks [:snap/id
-              :snap/user_id
-              :snap/name
-              :snap/content
-              :snap/language_id
-              :snap/create_date
-              :snap/update_date]
+    (let [ks [:user/id
+              :user/username
+              :user/password
+              :user/email
+              :user/avatar
+              :user/bio]
           existing-by-id (u/get-user-by-id @test-db 1)
-          existing-by-username (u/get-user-by-username @test-db 1)]
+          ;; existing-by-username (u/get-user-by-username @test-db "vollcheck")
+          ]
       (is (= (keys existing-by-id) ks))
-      (is (= (keys existing-by-username) ks))))
+      ;; (is (= (keys existing-by-username) ks))
+      ))
 
   (testing "get user by id when lang doesn't exist"
     (is (= nil (u/get-user-by-id @test-db 0))))
 
   (testing "create new user"
-    (let [new-lang (u/save-user @test-db {:username "thatguy"
+    (let [new-user (u/save-user @test-db {:username "thatguy"
                                           :email "that@guy.net"
                                           :avatar ""
                                           :bio "wrangling parens"})
-          new-lang-id (second (first new-lang))]
-      (is (= 2 new-lang-id))))
+          new-user-id (second (first new-user))]
+      (is (= 2 new-user-id))))
 
   (testing "list all users"
-    (is (= 1 (count (u/get-users @test-db)))))
+    (is (= 2 (count (u/get-users @test-db)))))
 
   (testing "update existing snap"
-    (let [result (u/save-user @test-db {:id 1
-                                        :username "vollcheck"
-                                        :password "admin"
-                                        :email "vollcheck@snipsnap.com"
-                                        :avatar ""
-                                        :bio "wrangling parens with emacs"})]
+    (let [result (u/save-user @test-db {:user/id 1
+                                        :user/username "vollcheck"
+                                        :user/password "admin"
+                                        :user/email "vollcheck@snipsnap.com"
+                                        :user/avatar ""
+                                        :user/bio "wrangling parens with emacs"})]
       (is (= 1 (:next.jdbc/update-count result)))))
 
   (testing "remove existing user"

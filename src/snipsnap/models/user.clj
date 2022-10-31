@@ -7,7 +7,7 @@
   "Seed the user table with this data."
   [{:username "vollcheck" :password "admin"
     :email "vollcheck@snipsnap.com"
-    :avatar "https://avatars.githubusercontent.com/u/42350899?v=4"
+    :avatar "" ;; https://avatars.githubusercontent.com/u/42350899?v=4
     :bio "clojure enjoyer"}])
 
 (defn get-user-by-id
@@ -15,10 +15,17 @@
   [db id]
   (sql/get-by-id (db) :user id))
 
+#_(defn get-user-by-username
+  "Given a user ID, return the user record."
+  [db username]
+    (sql/find-by-keys (db) :user {:username username}))
+
 (defn get-user-by-username
   "Given a user ID, return the user record."
   [db username]
-  (sql/find-by-keys (db) :user {:username username}))
+  (sql/query (db) (hsql/format {:select [:*]
+                                :from [:user]
+                                :where [:= :username username]})))
 
 (defn get-users
   "Return all available users, sorted by name."
