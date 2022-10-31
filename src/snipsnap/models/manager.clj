@@ -7,7 +7,7 @@
             [snipsnap.models.user :as user]
             [snipsnap.models.snap :as snap]))
 
-;; our database connection and initial data
+;; database connection and initial data
 
 (def ^:private ^:const db-spec
   "SQLite database connection spec."
