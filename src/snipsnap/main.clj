@@ -2,7 +2,7 @@
 
 (ns snipsnap.main
   "This is an example web application, using just a few basic Clojure
-  libraries: Ring, Compojure, Component, Selmer, and next.jdbc.
+  libraries: Ring, Compojure, Component and next.jdbc.
 
   I recommend this as a good way to get started building web applications
   in Clojure so that you understand the basic moving parts in any web app.
@@ -16,13 +16,6 @@
   Compojure is the most widely used routing library. It lets you
   define mappings from URL patterns -- routes -- to handler functions.
 
-  Selmer is a templating library that lets you write your web pages
-  as HTML templates that follow the Django style of simple variable
-  substitution, conditionals, and loops. Another popular approach
-  for building web pages is Hiccup, which takes Clojure data structures
-  and transforms them to HTML. If you need designers to deal with your
-  HTML templates, Selmer is going to be a lot easier for them to work with.
-
   next.jdbc is the next generation JDBC library for Clojure, replacing
   clojure.java.jdbc. It provides a fast, idiomatic wrapper around the
   complexity that is Java's JDBC class hierarchy.
@@ -30,17 +23,14 @@
   This example uses a local SQLite database to store data."
   (:require [com.stuartsierra.component :as component]
             [compojure.coercions :refer [as-int]]
-            [compojure.core :refer [GET POST DELETE let-routes]]
+            [compojure.core :refer [ANY GET POST DELETE let-routes defroutes]]
             [compojure.route :as route]
-            ;; we use Jetty by default but if you want to use
-            ;; http-kit instead, uncomment this line...
-            ;; [org.httpkit.server :refer [run-server]]
-            ;; ...and comment out this Jetty line:
             [ring.adapter.jetty :refer [run-jetty]]
             [ring.middleware.defaults :as ring-defaults]
             [ring.middleware.json :refer [wrap-json-response wrap-json-body
                                           wrap-json-params]]
             [ring.util.response :as resp]
+            [snipsnap.auth :as auth]
             [snipsnap.controllers.auth :as auth-ctl]
             [snipsnap.controllers.core :as core-ctl]
             [snipsnap.controllers.user :as user-ctl]
@@ -112,10 +102,32 @@
                                          (assoc-in [:security :anti-forgery] false)
                                          ;; support load balancers
                                          (assoc-in [:proxy] true)))
+        ;; (auth/auth-middleware)
+        ;; (auth/wrap-jwt-authentication)
+
         (wrap-json-response)
         (wrap-json-body)
-        (wrap-json-params)
-        )))
+        (wrap-json-params))))
+
+(defn auth-stack
+  "Given the application component and middleware, return a standard stack of
+  Ring middleware for a web application."
+  [app-component app-middleware]
+  (fn [handler]
+    (-> handler
+        (app-middleware)
+        (add-app-component app-component)
+        (ring-defaults/wrap-defaults (-> ring-defaults/site-defaults
+                                         ;; disable XSRF for now
+                                         (assoc-in [:security :anti-forgery] false)
+                                         ;; support load balancers
+                                         (assoc-in [:proxy] true)))
+        (auth/auth-middleware)
+        (auth/wrap-jwt-authentication)
+
+        (wrap-json-response)
+        (wrap-json-body)
+        (wrap-json-params))))
 
 ;; This is the main web handler, that builds routing middleware
 ;; from the application component (defined above). The handler is passed
@@ -134,40 +146,31 @@
   and we need to pass in the application component at start up, we
   need to define our route handlers so that they can be parameterized."
   [application]
-  (let-routes [wrap (middleware-stack application #'my-middleware)]
+  (let-routes [wrap (middleware-stack application #'my-middleware)
+               auth-wrap (auth-stack application #'my-middleware)]
+
     ;; dashboard
     (GET  "/"                [] (wrap #'core-ctl/dashboard))
 
+    ;; TODO: to test
     ;; auth
-    (POST   "/register"       [] (wrap #'auth-ctl/register)) ;; TODO
-    (POST   "/login"          [] (wrap #'auth-ctl/login)) ;; TODO
-    (POST   "/logout"         [] (wrap #'auth-ctl/logout)) ;; TODO
+    (POST   "/register"       [] (wrap #'auth-ctl/register))
+    (POST   "/login"          [] (wrap #'auth-ctl/login))
+    ;; (POST   "/logout"         [] (wrap #'auth-ctl/logout))
 
     ;; user
+    (GET    "/users"          []  (wrap #'user-ctl/user-list))
     (GET    "/user/:username" [_] (wrap #'user-ctl/read-user))
     (POST   "/user/"          [_] (wrap #'user-ctl/create-or-update-user))
     (DELETE "/user/:username" [_] (wrap #'user-ctl/delete-user))
-    ;; TODO: list of users?
 
     ;; snap
+    (GET    "/snaps"        []              (wrap #'snap-ctl/snap-list))
     (GET    "/snap/:id"     [id :<< as-int] (wrap #'snap-ctl/read-snap))
-    (POST   "/snap/"        []              (wrap #'snap-ctl/create-or-update-snap))
-    (DELETE "/snap/:id"     [id :<< as-int] (wrap #'snap-ctl/delete-snap))
-    ;; TODO: list of snaps?
+    (POST   "/snap/"        []              (auth-wrap #'snap-ctl/create-or-update-snap))
+    (DELETE "/snap/:id"     [id :<< as-int] (auth-wrap #'snap-ctl/delete-snap))
 
-    ;; horrible: application should POST to this URL!
-    ;; (GET  "/user/delete/:id{[0-9]+}" [id :<< as-int] (wrap #'user-ctl/delete-by-id))
-
-    ;; add a new user:
-    ;; (GET  "/user/form"               []              (wrap #'user-ctl/edit))
-
-    ;; edit an existing user:
-    ;; (GET  "/user/form/:id{[0-9]+}"   [id :<< as-int] (wrap #'user-ctl/edit))
-    ;; (GET  "/user/list"               []              (wrap #'user-ctl/get-users))
-    ;; (POST "/user/save"               []              (wrap #'user-ctl/save))
-
-    ;; this just resets the change tracker but really should be a POST :)
-    ;; (GET  "/reset"                   []              (wrap #'user-ctl/reset-changes))
+    ;; other
     (route/resources "/")
     (route/not-found "Not Found")))
 
@@ -271,6 +274,7 @@
                          )))
 
 (comment
+  ;; START
   ;; remote controller checkpoint
   (def system (new-system 8888))
   (alter-var-root #'system component/start)
@@ -281,13 +285,7 @@
   (require '[next.jdbc :as jdbc]
            '[next.jdbc.sql :as sql])
   (sql/find-by-keys ds :user {:username "vollcheck"})
-  (jdbc/execute-one! ds ["select * from user"]) ;; => #:user{:id 1,
-;;           :username "vollcheck",
-;;           :password "admin",
-;;           :email "vollcheck@snipsnap.com",
-;;           :avatar
-;;           "https://avatars.githubusercontent.com/u/42350899?v=4",
-;;           :bio "clojure enjoyer"}
+
   ;; the comma here just "anchors" the closing paren on this line,
   ;; which makes it easier to put you cursor at the end of the lines
   ;; above when you want to evaluate them into the REPL:

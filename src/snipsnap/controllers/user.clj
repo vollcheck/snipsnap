@@ -1,6 +1,6 @@
 (ns snipsnap.controllers.user
   "The main controller for the user management portion of this app."
-  (:require [ring.util.response :refer [response]]
+  (:require [ring.util.response :as r]
             [snipsnap.models.user :as user]
             [snipsnap.utils :refer [clean-entity-data]]))
 
@@ -9,7 +9,14 @@
   (let [db (get-in req [:application/component :database])
         data (clean-entity-data (:json-params req))
         result_id (->> data (user/save-user db) first second)]
-    (response {:snap/id result_id})))
+    (r/response {:snap/id result_id})))
+
+(defn user-list
+  "User profile view."
+  [req]
+  (let [db (get-in req [:application/component :database])
+        data (user/get-users db)]
+    (r/response data)))
 
 (defn read-user
   "User profile view."
@@ -20,7 +27,7 @@
         data (if (vector? data)
                (first data)
                data)]
-    (response data)))
+    (r/response data)))
 
 (defn delete-user
   [req]
@@ -30,4 +37,4 @@
         message (if (= result 0)
                   (str "Can't delete user with username " username ", doesn't exist")
                   (str "Sucessfully deleted snap with username " username))]
-    (response {:message message})))
+    (r/response {:message message})))

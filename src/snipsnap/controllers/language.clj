@@ -1,5 +1,5 @@
 (ns snipsnap.controllers.language
-  (:require [ring.util.response :as resp]
+  (:require [ring.util.response :as r]
             [snipsnap.models.language :as language]
             [snipsnap.utils :refer [clean-entity-data]]))
 
@@ -8,7 +8,7 @@
   (let [db (get-in req [:application/component :database])
         data (clean-entity-data (:json-params req))
         result_id (->> data (language/save-language db) first second)]
-    (resp/response {:snap/id result_id})))
+    (r/response {:snap/id result_id})))
 
 (defn read-language
   [req]
@@ -18,7 +18,7 @@
         data (if (vector? data)
                (first data)
                data)]
-    (resp/response data)))
+    (r/response data)))
 
 (defn delete-language
   [req]
@@ -28,4 +28,4 @@
         message (if (= result 0)
                   (str "Can't delete language with id " id ", doesn't exist")
                   (str "Sucessfully deteled snap with id " id))]
-    (resp/response {:message message})))
+    (r/response {:message message})))

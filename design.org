@@ -75,6 +75,8 @@
    - [ ] user controller tests (requires auth)
    - [ ] get users by the date of creation - add this field at first
    - [ ] data validation? - to elaborate more on that
+   - [ ] unify models queries to one base function?
+   - [ ] unify controllers over entity as well
    - [X] snap model tests
    - [X] user model tests
    - [X] language model tests

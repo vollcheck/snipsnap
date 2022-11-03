@@ -35,13 +35,14 @@ order by name"]))
   this is an update operation, otherwise it's an insert."
   [db snap]
   (let [id (:id snap)]
+    (prn id)
     (if (and id (not (zero? id)))
-      ;; update
+      ;; update ;; caution! returns number of updated rows instead of snap id
       (sql/update! (db) :snap
-                   (-> snap
-                       (dissoc :id)
-                       (assoc :update_date (now)))
-                   {:id id})
+                     (-> snap
+                         (dissoc :id)
+                         (assoc :update_date (now)))
+                     {:id id})
       ;; insert
       (sql/insert! (db) :snap
                    (-> snap

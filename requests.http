@@ -1,10 +1,7 @@
 :json = Content-Type: application/json
 :url = http://localhost:8888
-
-###
-
-GET :url/snap/2
-:json
+:token = Token eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyL2lkIjoxLCJ1c2VyL3VzZXJuYW1lIjoidm9sbGNoZWNrIn0.w92A7hyp4SbpsyVqRwUkqdmGmkCbSu9BdjNZ1arOH1Y
+:auth = authorization: :token
 
 ###
 
@@ -32,3 +29,33 @@ DELETE :url/snap/6
 :json
 
 ###
+
+GET :url/
+:json
+
+###
+
+GET :url/snaps
+:json
+:auth
+
+###
+
+POST :url/login
+:json
+
+{"username": "vollcheck",
+ "password": "admin"}
+
+###
+
+# {
+#   "status": 200,
+#   "body": {
+#     "user": {
+#       "user/id": 1,
+#       "user/username": "vollcheck"
+#     },
+#     "token": "eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyL2lkIjoxLCJ1c2VyL3VzZXJuYW1lIjoidm9sbGNoZWNrIn0.w92A7hyp4SbpsyVqRwUkqdmGmkCbSu9BdjNZ1arOH1Y"
+#   }
+# }

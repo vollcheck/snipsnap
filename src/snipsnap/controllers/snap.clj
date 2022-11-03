@@ -1,5 +1,5 @@
 (ns snipsnap.controllers.snap
-  (:require [ring.util.response :refer [response]]
+  (:require [ring.util.response :as r]
             [snipsnap.models.snap :as snap]
             [snipsnap.utils :refer [clean-entity-data]]))
 
@@ -8,7 +8,13 @@
   (let [db (get-in req [:application/component :database])
         data (clean-entity-data (:json-params req))
         result_id (->> data (snap/save-snap db) first second)]
-    (response {:snap/id result_id})))
+    (r/response {:snap/id result_id})))
+
+(defn snap-list
+  [req]
+  (let [db (get-in req [:application/component :database])
+        data (snap/get-snaps db)]
+    (r/response data)))
 
 (defn read-snap
   [req]
@@ -18,7 +24,7 @@
         data (if (vector? data)
                (first data)
                data)]
-    (response data)))
+    (r/response data)))
 
 (defn delete-snap
   [req]
@@ -28,7 +34,7 @@
         message (if (= result 0)
                   (str "Can't delete snap with id " id ", doesn't exist")
                   (str "Sucessfully deleted snap with id " id))]
-    (response {:message message})))
+    (r/response {:message message})))
 
 (comment
   (def db (get snipsnap.main/system :database))
@@ -36,5 +42,5 @@
              :name "just a comment another one",
              :content "(commentfdajslfdsajlfdajslf)",
              :language_id 1})
-  (snap/save-snap ds data)
+  (snap/save-snap db data)
   )
