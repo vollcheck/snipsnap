@@ -11,6 +11,7 @@
         ring/ring {:mvn/version "1.9.2"}
         ring/ring-defaults {:mvn/version "0.3.2"}
         ring/ring-json {:mvn/version "0.5.1"}
+        ring-cors/ring-cors {:mvn/version "0.1.13"}
 
         ;; authorization & authentication
         buddy/buddy-auth {:mvn/version "3.0.323"}

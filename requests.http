@@ -5,6 +5,17 @@
 
 ###
 
+GET :url/snap/1
+:json
+
+###
+
+GET :url/user/vollcheck
+:json
+
+###
+
+
 POST :url/snap/
 :json
 

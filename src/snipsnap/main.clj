@@ -27,6 +27,7 @@
             [compojure.route :as route]
             [ring.adapter.jetty :refer [run-jetty]]
             [ring.middleware.defaults :as ring-defaults]
+            [ring.middleware.cors :refer [wrap-cors]]
             [ring.middleware.json :refer [wrap-json-response wrap-json-body
                                           wrap-json-params]]
             [ring.util.response :as resp]
@@ -102,9 +103,8 @@
                                          (assoc-in [:security :anti-forgery] false)
                                          ;; support load balancers
                                          (assoc-in [:proxy] true)))
-        ;; (auth/auth-middleware)
-        ;; (auth/wrap-jwt-authentication)
-
+        (wrap-cors :access-control-allow-origin [#".*"]
+                   :access-control-allow-methods [:get :post :delete])
         (wrap-json-response)
         (wrap-json-body)
         (wrap-json-params))))
@@ -122,6 +122,9 @@
                                          (assoc-in [:security :anti-forgery] false)
                                          ;; support load balancers
                                          (assoc-in [:proxy] true)))
+        (wrap-cors :access-control-allow-origin [#".*"]
+                   :access-control-allow-methods [:get :post :delete])
+
         (auth/auth-middleware)
         (auth/wrap-jwt-authentication)
 
