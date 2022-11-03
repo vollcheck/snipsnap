@@ -55,6 +55,17 @@ POST :url/login
 
 ###
 
+POST :url/register
+:json
+
+{"username": "another",
+ "password": "admin",
+ "email": "another@one.com",
+ "bio": "something something",
+ "avatar": ""}
+
+###
+
 # {
 #   "status": 200,
 #   "body": {

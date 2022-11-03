@@ -85,6 +85,7 @@
 
 
 ** TASKS
+   - [ ] make username unique in the user table
    - [X] authorization (look above!)
    - [X] authentication (make sure that you is you)
    - [ ] register controller

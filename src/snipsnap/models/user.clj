@@ -77,7 +77,15 @@
 
 (comment
   (def db (:database snipsnap.main/system))
+
+
   (get-user-by-username db "vollcheck")
   (get-user-by-payload db {:user/id 1, :user/username "vollcheck"})
   (get-user-by-credentials db {"username" "vollcheck" "password" "admin"})
+  (def new-user (save-user db {:username "another"
+                               :password "one"
+                               :email ""
+                               :avatar ""
+                               :bio ""}))
+  (second (first new-user)) ;; get an id of newly created user
   )

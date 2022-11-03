@@ -3,14 +3,18 @@
             [snipsnap.auth :refer [create-token]]
             [snipsnap.models.user :as u]))
 
-(defn register ;; TODO
+(defn register
   [req]
   (let [db (get-in req [:application/component :database])
         data (:json-params req)
         user (u/save-user db data)]
-    {:status 201
-     :body {:user user
-            :token (create-token user)}}))
+    (r/response
+     (if (nil? user)
+       {:status 400
+        :body {:error "Cannot create user!"}}
+       {:status 201
+        :body {:user {:id (second (first user))}
+               :token (create-token user)}}))))
 
 (defn login
   [req]
