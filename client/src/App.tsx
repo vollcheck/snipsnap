@@ -1,14 +1,14 @@
 import "./App.css";
 
-import FetchClient from "./client/fetch.client";
 import React from "react";
 import config from "./config";
+import { httpClient } from "./client/index";
 import logo from "./logo.svg";
 
 function App() {
-  const client = new FetchClient();
-  const resp = client.get(config.BASE_URL + "/");
-  resp.then((responseData) => console.log(responseData["message"]));
+  //type Dashboard = { message: string };
+  const resp = httpClient.get(config.BASE_URL + "/");
+  resp.then((dashboard) => console.log(dashboard["message"]));
 
   return (
     <div className="App">

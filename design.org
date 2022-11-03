@@ -113,8 +113,9 @@
 * CLIENT ARCHITECTURE & DESIGN
   by client I mean so-called /front-end/
 
-** UI framework
-  - https://reactjs.org/
+  - ui framework: https://reactjs.org/
+  - css framework: https://milligram.io/
 
-** CSS framework
-  - https://milligram.io/
+
+** FE tasks:
+  - [ ] component for snap view
