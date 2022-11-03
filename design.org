@@ -66,17 +66,32 @@
                  {:error "Unauthorized"}))))
     #+END_SRC
 
-** AUTH
+** authentication
   https://github.com/kelvin-mai/clj-auth/blob/clj-auth-snapshot/src/auth/utils.clj
 
+** authorization
+   #+BEGIN_SRC clojure
+     (defn me
+       [request]
+       (let [payload (:identity request)
+             user (db/get-user-by-payload payload)]
+         (if (nil? user)
+           {:status 404
+            :body {:error "Invalid credentials"}}
+           {:status 200
+            :body {:user user
+                   :token (create-token user)}})))
+   #+END_SRC
+
+
 ** TASKS
-   - [ ] AUTH (look above!)
+   - [X] authorization (look above!)
+   - [X] authentication (make sure that you is you)
+   - [ ] register controller
    - [ ] snap controller tests (requires auth)
    - [ ] user controller tests (requires auth)
    - [ ] get users by the date of creation - add this field at first
    - [ ] data validation? - to elaborate more on that
-   - [ ] unify models queries to one base function?
-   - [ ] unify controllers over entity as well
    - [X] snap model tests
    - [X] user model tests
    - [X] language model tests
@@ -88,6 +103,17 @@
    - [X] ensure responses are wrapped as JSON in the middleware
 
 ** EXTRA TASKS (that might be useful in general framework)
+   - [ ] unify models queries to one base function?
+   - [ ] unify controllers over entity as well
    - [ ] make one abstract CRUD method for each entity
    - [ ] make ability to load db seed data dynamically (eg. from file)
    - [ ] replace `println` with logging here and there
+
+* CLIENT ARCHITECTURE & DESIGN
+  by client I mean so-called /front-end/
+
+** UI framework
+  - https://reactjs.org/
+
+** CSS framework
+  - https://milligram.io/

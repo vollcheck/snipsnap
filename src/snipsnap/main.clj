@@ -157,6 +157,7 @@
     (POST   "/register"       [] (wrap #'auth-ctl/register))
     (POST   "/login"          [] (wrap #'auth-ctl/login))
     ;; (POST   "/logout"         [] (wrap #'auth-ctl/logout))
+    (GET   "/me"              [] (auth-wrap #'auth-ctl/me))
 
     ;; user
     (GET    "/users"          []  (wrap #'user-ctl/user-list))

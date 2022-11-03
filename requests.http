@@ -41,6 +41,12 @@ GET :url/snaps
 
 ###
 
+GET :url/me
+:json
+:auth
+
+###
+
 POST :url/login
 :json
 

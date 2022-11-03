@@ -25,33 +25,35 @@
   [db id]
   (sql/get-by-id (db) :user id))
 
-#_(defn get-user-by-username
-  "Given a user ID, return the user record."
-  [db username]
-    (sql/find-by-keys (db) :user {:username username}))
-
 (defn get-user-by-username
   "Given a user ID, return the user record."
   [db username]
-  (sql/query (db) (hsql/format {:select [:*]
-                                :from [:user]
-                                :where [:= :username username]})))
-
+  (first (sql/query (db)
+                    (hsql/format {:select [:*]
+                                  :from [:user]
+                                  :where [:= :username username]}))))
 
 (defn get-user-by-credentials
   "Get user ID and username for the login token hash."
   [db data]
-  (let [{:keys [username password]} (keywordize-keys data)
+  (let [{:keys [user/id user/username]} data
         query {:select [:id :username]
                :from [:user]
                :where [:and
-                       [:= :username username]
-                       [:= :password password]]}]
-  (first (sql/query (db) (hsql/format query)))))
+                       [:= :id id]
+                       [:= :username username]]}]
+    (first (sql/query (db) (hsql/format query)))))
 
 (defn get-user-by-payload
-  [payload]
-  ())
+  [db data]
+  ;; data => #:user{:id 1, :username "vollcheck"}
+  (let [{:keys [user/id user/username]} data
+        query {:select [:id :username]
+               :from [:user]
+               :where [:and
+                       [:= :id id]
+                       [:= :username username]]}]
+    (first (sql/query (db) (hsql/format query)))))
 
 (defn save-user
   "Save a user record. If ID is present and not zero, then
@@ -75,5 +77,7 @@
 
 (comment
   (def db (:database snipsnap.main/system))
+  (get-user-by-username db "vollcheck")
+  (get-user-by-payload db {:user/id 1, :user/username "vollcheck"})
   (get-user-by-credentials db {"username" "vollcheck" "password" "admin"})
   )
