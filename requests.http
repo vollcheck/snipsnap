@@ -13,8 +13,7 @@ GET :url/snap/1
 GET :url/user/vollcheck
 :json
 
-###
-
+### snap create
 
 POST :url/snap/
 :json

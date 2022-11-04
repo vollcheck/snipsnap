@@ -118,4 +118,5 @@
 
 
 ** FE tasks:
+  - [ ] color of the background #11191F - make icon similar
   - [ ] component for snap view
