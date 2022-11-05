@@ -20,35 +20,34 @@ export async function action({ request, params }) {
 }
 
 export default function Snap() {
-  const contact = useLoaderData();
+  const snap = useLoaderData();
 
   return (
-    <div id="contact">
-      <div>
-        <img key={contact.avatar} src={contact.avatar || null} />
-      </div>
-
+    <div id="snap">
       <div>
         <h1>
-          {contact.first || contact.last ? (
+          {snap["user/username"] || snap["snap/name"] ? (
             <>
-              {contact.first} {contact.last}
+              {snap["user/username"]} {snap["snap/name"]}
             </>
           ) : (
             <i>No Name</i>
           )}{" "}
-          <Favorite contact={contact} />
+          <Favorite snap={snap} />
         </h1>
 
-        {contact.twitter && (
+        {snap.twitter && (
           <p>
-            <a target="_blank" href={`https://twitter.com/${contact.twitter}`}>
-              {contact.twitter}
+            <a
+              target="_blank"
+              href={`https://twitter.com/${snap["language/name"]}`}
+            >
+              {snap["language/name"]}
             </a>
           </p>
         )}
 
-        {contact.notes && <p>{contact.notes}</p>}
+        {snap["snap/content"] && <p>{snap["snap/content"]}</p>}
 
         <div>
           <Form action="edit">
@@ -75,10 +74,10 @@ export default function Snap() {
   );
 }
 
-function Favorite({ contact }) {
+function Favorite({ snap }) {
   const fetcher = useFetcher();
   // yes, this is a `let` for later
-  let favorite = contact.favorite;
+  let favorite = snap["language/name"];
   if (fetcher.formData) {
     favorite = fetcher.formData.get("favorite") === "true";
   }
