@@ -1,0 +1,9 @@
+{
+  "snap/id": 1,
+  "snap/user_id": 1,
+  "snap/name": "sum of two integers",
+  "snap/content": "(defn sum [x y] (+ x y))",
+  "snap/language_id": 1,
+  "snap/create_date": null,
+  "snap/update_date": null
+}
