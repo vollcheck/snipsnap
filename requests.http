@@ -17,11 +17,11 @@ GET :url/user/vollcheck
 
 POST :url/snap/
 :json
+:auth
 
-{"snap/user_id": 1,
- "snap/name": "just a comment another one",
- "snap/content": "(commentfdajslfdsajlfdajslf)",
- "snap/language_id": 1}
+{"name": "testing abilities",
+ "content": "(eval (apply))",
+ "language_id": 1}
 
 ###
 
@@ -47,7 +47,6 @@ GET :url/
 
 GET :url/snaps
 :json
-:auth
 
 ###
 

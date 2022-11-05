@@ -151,22 +151,22 @@
   [application]
   (let-routes [wrap (middleware-stack application #'my-middleware)
                auth-wrap (auth-stack application #'my-middleware)]
-
     ;; dashboard
     (GET  "/"                [] (wrap #'core-ctl/dashboard))
 
-    ;; TODO: to test
     ;; auth
     (POST   "/register"       [] (wrap #'auth-ctl/register))
     (POST   "/login"          [] (wrap #'auth-ctl/login))
+    ;; TODO
     ;; (POST   "/logout"         [] (wrap #'auth-ctl/logout))
     (GET   "/me"              [] (auth-wrap #'auth-ctl/me))
 
     ;; user
     (GET    "/users"          []  (wrap #'user-ctl/user-list))
     (GET    "/user/:username" [_] (wrap #'user-ctl/read-user))
-    (POST   "/user/"          [_] (wrap #'user-ctl/create-or-update-user))
-    (DELETE "/user/:username" [_] (wrap #'user-ctl/delete-user))
+    ;; TODO: only edit, creation is being done using register
+    (POST   "/user/"          [_] (auth-wrap #'user-ctl/create-or-update-user))
+    (DELETE "/user/:username" [_] (auth-wrap #'user-ctl/delete-user))
 
     ;; snap
     (GET    "/snaps"        []              (wrap #'snap-ctl/snap-list))

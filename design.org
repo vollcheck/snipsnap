@@ -114,9 +114,10 @@
   by client I mean so-called /front-end/
 
   - ui framework: https://reactjs.org/
-  - css framework: https://milligram.io/
+  - css framework: https://picocss.com/
 
 
 ** FE tasks:
-  - [ ] color of the background #11191F - make icon similar
-  - [ ] component for snap view
+  - [ ] auth for axios client (it will be big!)
+    + [ ] login
+  - [X] component for snap list view
