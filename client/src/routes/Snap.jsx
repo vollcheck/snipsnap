@@ -21,6 +21,7 @@ export async function action({ request, params }) {
 
 export default function Snap() {
   const snap = useLoaderData();
+  console.log(snap);
 
   return (
     <div id="snap">
@@ -28,7 +29,7 @@ export default function Snap() {
         <h1>
           {snap["user/username"] || snap["snap/name"] ? (
             <>
-              {snap["user/username"]} {snap["snap/name"]}
+              {snap["user/username"]} / {snap["snap/name"]}
             </>
           ) : (
             <i>No Name</i>
