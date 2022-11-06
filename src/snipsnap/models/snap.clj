@@ -31,11 +31,10 @@ order by name")]))
   Since this is a join, the keys in the hash maps returned will
   be namespace-qualified by the table from which they are drawn:
 
-  snap/id, snap/name, etc, language/name, user/username"
+  snap/id, snap/name, etc, user/username"
   [db]
-  (sql/query (db) ["select s.*, l.name, u.username
+  (sql/query (db) ["select s.id, s.name, u.username
  from snap s
- left join language l on s.language_id = l.id
  left join user u on s.user_id = u.id
 order by name"]))
 
