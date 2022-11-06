@@ -1,4 +1,4 @@
-//import "./App.css";
+import "./index.css";
 
 import EditSnap, { action as editAction } from "./routes/EditSnap";
 import Root, { action as rootAction, loader as rootLoader } from "./Root";

@@ -12,6 +12,19 @@ export async function loader({ params }) {
   return snap;
 }
 
+// TODO: to remove
+const snapToRemove = {
+  "snap/id": 1,
+  "snap/user_id": 1,
+  "user/username": "vollcheck",
+  "snap/name": "sum of two integers",
+  "snap/content": "(defn sum [x y] (+ x y))",
+  "snap/language_id": 1,
+  "language/name": "Clojure",
+  "snap/create_date": null,
+  "snap/update_date": null,
+};
+
 export async function action({ request, params }) {
   let formData = await request.formData();
   return upsertSnap(params.snapId, {
@@ -26,7 +39,7 @@ export default function Snap() {
   return (
     <div id="snap">
       <div>
-        <h1>
+        <h2>
           {snap["user/username"] || snap["snap/name"] ? (
             <>
               {snap["user/username"]} / {snap["snap/name"]}
@@ -34,21 +47,11 @@ export default function Snap() {
           ) : (
             <i>No Name</i>
           )}{" "}
-          <Favorite snap={snap} />
-        </h1>
+        </h2>
 
-        {snap.twitter && (
-          <p>
-            <a
-              target="_blank"
-              href={`https://twitter.com/${snap["language/name"]}`}
-            >
-              {snap["language/name"]}
-            </a>
-          </p>
-        )}
+        {snap["language/name"] && <p>Language: {snap["language/name"]}</p>}
 
-        {snap["snap/content"] && <p>{snap["snap/content"]}</p>}
+        {snap["snap/content"] && <code>{snap["snap/content"]}</code>}
 
         <div>
           <Form action="edit">
@@ -95,3 +98,5 @@ function Favorite({ snap }) {
     </fetcher.Form>
   );
 }
+
+// <Favorite snap={snap} />;
