@@ -5,6 +5,11 @@
 
 ###
 
+GET :url/snaps
+:json
+
+###
+
 GET :url/snap/1
 :json
 

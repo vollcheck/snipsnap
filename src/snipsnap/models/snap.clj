@@ -15,7 +15,15 @@
 (defn get-snap-by-id
   "Given a snap ID, return the snap record."
   [db id]
-  (sql/get-by-id (db) :snap id))
+  (sql/query (db) [(str "select s.*, l.name, u.username
+ from snap s
+ left join language l on s.language_id = l.id
+ left join user u on s.user_id = u.id
+ where s.id = " id "
+order by name")]))
+
+(let [db (:database snipsnap.main/system)]
+  (get-snap-by-id db 1))
 
 (defn get-snaps
   "Return all available language records (in order).
