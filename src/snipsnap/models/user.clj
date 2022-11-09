@@ -36,13 +36,20 @@
 (defn get-user-by-credentials
   "Get user ID and username for the login token hash."
   [db data]
-  (let [{:keys [user/id user/username]} data
+  (let [username (get data "username")
+        password (get data "password")
         query {:select [:id :username]
                :from [:user]
                :where [:and
-                       [:= :id id]
-                       [:= :username username]]}]
+                       [:= :username username]
+                       [:= :password password]]}]
     (first (sql/query (db) (hsql/format query)))))
+
+(comment
+  (def db (:database snipsnap.main/system))
+  (get-user-by-credentials db {"username" "another", "password" "admin"})
+  )
+
 
 (defn get-user-by-payload
   [db data]
@@ -77,7 +84,6 @@
 
 (comment
   (def db (:database snipsnap.main/system))
-
 
   (get-user-by-username db "vollcheck")
   (get-user-by-payload db {:user/id 1, :user/username "vollcheck"})

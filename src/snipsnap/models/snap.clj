@@ -22,9 +22,6 @@
  where s.id = " id "
 order by name")]))
 
-(let [db (:database snipsnap.main/system)]
-  (get-snap-by-id db 1))
-
 (defn get-snaps
   "Return all available language records (in order).
 

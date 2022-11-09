@@ -42,6 +42,7 @@ POST :url/snap/
 
 DELETE :url/snap/6
 :json
+:auth
 
 ###
 
@@ -50,12 +51,13 @@ GET :url/
 
 ###
 
-GET :url/snaps
+GET :url/me
 :json
+:auth
 
 ###
 
-GET :url/me
+OPTIONS :url/me
 :json
 :auth
 

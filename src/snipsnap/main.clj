@@ -23,7 +23,7 @@
   This example uses a local SQLite database to store data."
   (:require [com.stuartsierra.component :as component]
             [compojure.coercions :refer [as-int]]
-            [compojure.core :refer [ANY GET POST DELETE let-routes defroutes]]
+            [compojure.core :refer [ANY OPTIONS GET POST DELETE let-routes]]
             [compojure.route :as route]
             [ring.adapter.jetty :refer [run-jetty]]
             [ring.middleware.defaults :as ring-defaults]
@@ -36,8 +36,7 @@
             [snipsnap.controllers.core :as core-ctl]
             [snipsnap.controllers.user :as user-ctl]
             [snipsnap.controllers.snap :as snap-ctl]
-            [snipsnap.models.manager :as db-manager])
-  (:gen-class))
+            [snipsnap.models.manager :as db-manager]))
 
 ;; Implement your application's lifecycle here:
 ;; Although the application config is not used in this simple
@@ -76,7 +75,11 @@
   (fn [req]
     (let [resp (handler req)]
       (if (resp/response? resp)
-        resp
+        (do (prn (:headers resp))
+            (-> resp
+                (assoc-in [:headers "Access-Control-Allow-Origin"] "http://localhost:3000")
+                (assoc-in [:headers "Access-Control-Allow-Methods"] "*")
+                (assoc-in [:headers "Access-Control-Allow-Headers"] "*")))
         "no response"))))
 
 ;; Helper for building the middleware:
@@ -103,11 +106,12 @@
                                          (assoc-in [:security :anti-forgery] false)
                                          ;; support load balancers
                                          (assoc-in [:proxy] true)))
-        (wrap-cors :access-control-allow-origin [#".*"]
-                   :access-control-allow-methods [:get :post :delete])
         (wrap-json-response)
         (wrap-json-body)
-        (wrap-json-params))))
+        (wrap-json-params)
+        ;; (wrap-cors :access-control-allow-origin #"http://localhost:3000"
+        ;;            :access-control-allow-methods [:get :post :put :delete])
+        )))
 
 (defn auth-stack
   "Given the application component and middleware, return a standard stack of
@@ -117,20 +121,23 @@
     (-> handler
         (app-middleware)
         (add-app-component app-component)
-        (ring-defaults/wrap-defaults (-> ring-defaults/site-defaults
+        (ring-defaults/wrap-defaults (-> ring-defaults/api-defaults ;; site-defaults
                                          ;; disable XSRF for now
                                          (assoc-in [:security :anti-forgery] false)
                                          ;; support load balancers
-                                         (assoc-in [:proxy] true)))
-        (wrap-cors :access-control-allow-origin [#".*"]
-                   :access-control-allow-methods [:get :post :delete])
+                                         (assoc-in [:proxy] true)
+                                         ))
+
 
         (auth/auth-middleware)
         (auth/wrap-jwt-authentication)
 
         (wrap-json-response)
         (wrap-json-body)
-        (wrap-json-params))))
+        (wrap-json-params)
+        (wrap-cors :access-control-allow-origin #"http://localhost:3000"
+                   :access-control-allow-methods [:get :post :put :delete])
+        )))
 
 ;; This is the main web handler, that builds routing middleware
 ;; from the application component (defined above). The handler is passed
@@ -156,10 +163,23 @@
 
     ;; auth
     (POST   "/register"       [] (wrap #'auth-ctl/register))
-    (POST   "/login"          [] (wrap #'auth-ctl/login))
-    ;; TODO
-    ;; (POST   "/logout"         [] (wrap #'auth-ctl/logout))
-    (GET   "/me"              [] (auth-wrap #'auth-ctl/me))
+    (OPTIONS   "/login"          []
+               (let [r (wrap #'auth-ctl/login)]
+                 (prn r)
+                 r))
+    (POST   "/login"          []
+            (let [r (wrap #'auth-ctl/login)]
+              (prn r)
+              r))
+    (OPTIONS "/me"             []
+            (let [r (auth-wrap #'auth-ctl/me)]
+              (prn r)
+              r))
+    (GET    "/me"             []
+            (let [r (auth-wrap #'auth-ctl/me)]
+              (prn r)
+              r))
+
 
     ;; user
     (GET    "/users"          []  (wrap #'user-ctl/user-list))
@@ -277,6 +297,13 @@
                          :api-server (api-server #'my-handler port)
                          )))
 
+(defn repl-start
+  "Starter point used for firing system up while jacking in to the project"
+  []
+  #_{:clj-kondo/ignore [:inline-def]}
+  (let [_ (def system (new-system 8888))]
+    (alter-var-root #'system component/start)))
+
 (comment
   ;; START
   ;; remote controller checkpoint
@@ -328,4 +355,4 @@
         ;; connected to this application:
         (->> (reset! repl-system))
         ;; then wait "forever" on the promise created:
-        :web-server :shutdown deref)))
+        :api-server :shutdown deref)))
