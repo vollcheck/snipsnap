@@ -1,5 +1,5 @@
 import { Form, useFetcher, useLoaderData } from "react-router-dom";
-import { getSnap, upsertSnap } from "../client";
+import { getSnap, login, test_cors, upsertSnap } from "../client";
 
 export async function loader({ params }) {
   const snap = getSnap(params.snapId);
@@ -36,8 +36,31 @@ export default function Snap() {
   const snap = useLoaderData();
   console.log(snap);
 
+  const creds = { username: "vollcheck", password: "admin" };
+  const user = test_cors(creds);
+  console.log(user);
+
   return (
     <div id="snap">
+      <div>
+        <Form action="edit">
+          <button type="submit">Edit</button>
+        </Form>
+        <Form
+          method="post"
+          action="destroy"
+          onSubmit={(event) => {
+            if (
+              !window.confirm("Please confirm you want to delete this record.")
+            ) {
+              event.preventDefault();
+            }
+          }}
+        >
+          <button type="submit">Delete</button>
+        </Form>
+      </div>
+
       <div>
         <h2>
           {snap["user/username"] || snap["snap/name"] ? (
@@ -51,28 +74,11 @@ export default function Snap() {
 
         {snap["language/name"] && <p>Language: {snap["language/name"]}</p>}
 
-        {snap["snap/content"] && <code>{snap["snap/content"]}</code>}
+        {snap["snap/create_date"] && <p>Created: {snap["snap/create_date"]}</p>}
 
-        <div>
-          <Form action="edit">
-            <button type="submit">Edit</button>
-          </Form>
-          <Form
-            method="post"
-            action="destroy"
-            onSubmit={(event) => {
-              if (
-                !window.confirm(
-                  "Please confirm you want to delete this record."
-                )
-              ) {
-                event.preventDefault();
-              }
-            }}
-          >
-            <button type="submit">Delete</button>
-          </Form>
-        </div>
+        {snap["snap/update_date"] && <p>Updated: {snap["snap/update_date"]}</p>}
+
+        {snap["snap/content"] && <code>{snap["snap/content"]}</code>}
       </div>
     </div>
   );

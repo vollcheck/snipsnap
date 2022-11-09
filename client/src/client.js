@@ -74,3 +74,10 @@ export const login = async (data) => {
 export const me = async (data) => {
   return await client.get("/me", data).then((response) => response.data);
 };
+
+export const test_cors = async (data) => {
+  return await client
+    .post("/login", data)
+    .then((response) => response.data)
+    .catch((error) => console.log(error));
+};
