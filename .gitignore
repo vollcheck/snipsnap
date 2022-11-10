@@ -1,6 +1,6 @@
 /.cpcache
 /.clj-kondo/.cache
-/.lsp
+/.lsp/
 /.nrepl-port
 /.portal
 /.socket-repl-port

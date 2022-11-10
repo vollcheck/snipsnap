@@ -297,13 +297,6 @@
                          :api-server (api-server #'my-handler port)
                          )))
 
-(defn repl-start
-  "Starter point used for firing system up while jacking in to the project"
-  []
-  #_{:clj-kondo/ignore [:inline-def]}
-  (let [_ (def system (new-system 8888))]
-    (alter-var-root #'system component/start)))
-
 (comment
   ;; START
   ;; remote controller checkpoint
@@ -313,6 +306,7 @@
 
   (def ds (get-in system [:database :datasource]))
 
+  #_{:clj-kondo/ignore [:unused-namespace]}
   (require '[next.jdbc :as jdbc]
            '[next.jdbc.sql :as sql])
   (sql/find-by-keys ds :user {:username "vollcheck"})
