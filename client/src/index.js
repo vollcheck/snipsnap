@@ -1,5 +1,3 @@
-import "./index.css";
-
 import EditSnap, { action as editAction } from "./routes/EditSnap";
 import Root, { action as rootAction, loader as rootLoader } from "./Root";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";

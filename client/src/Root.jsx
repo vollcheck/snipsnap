@@ -72,6 +72,10 @@ const Root = () => {
 
   return (
     <>
+      <div id="topbar">
+        <h1>Snipsnap</h1>
+      </div>
+
       <div id="sidebar">
         <h1>Snipsnap</h1>
         <div>
@@ -79,7 +83,7 @@ const Root = () => {
             <input
               id="q"
               className={searching ? "loading" : ""}
-              aria-label="Search contacts"
+              aria-label="Search snaps"
               placeholder="Search"
               type="search"
               name="q"

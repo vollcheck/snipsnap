@@ -1,10 +1,10 @@
-import axios, { AxiosError } from "axios";
-
 import { BASE_URL } from "./config";
+import axios from "axios";
 
 // -- Client defintion
 const client = axios.create({
   baseURL: BASE_URL,
+  headers: { "Content-Type": "application/json" },
 });
 
 // -- Snap endpoints
