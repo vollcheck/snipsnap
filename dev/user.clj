@@ -1,6 +1,6 @@
 (ns user
   (:require clojure.main
-            [snipsnap.main :refer [repl-start]]
+            [snipsnap.main :refer [dev-start]]
             [clojure.tools.logging :as log]))
 
 (defn start []
@@ -8,7 +8,7 @@
   (println "Compiling code, please wait...")
   (log/info "Starting development system\n")
 
-  (repl-start)
+  (dev-start)
 
   (log/info "System started and ready...\n")
 

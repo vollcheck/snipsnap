@@ -297,6 +297,19 @@
                          :api-server (api-server #'my-handler port)
                          )))
 
+;; -- dev/user utilities
+(defn dev-start
+  "Starter point used for firing system up while jacking in to the project"
+  []
+  #_{:clj-kondo/ignore [:inline-def]}
+  (let [_ (def system (new-system 8888))]
+    (alter-var-root #'system component/start)))
+
+(defn dev-restart
+  []
+  (alter-var-root #'system component/stop)
+  (alter-var-root #'system component/start))
+
 (comment
   ;; START
   ;; remote controller checkpoint
