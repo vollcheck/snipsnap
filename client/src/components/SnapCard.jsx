@@ -1,30 +1,38 @@
-const SnapCard = ({snap}) => {
-  console.log(snap);
+import { capitalize, timeConverter } from "../utils";
 
-  if (!snap || snap.length === 0) return <p>There is no snap... (yet!)</p>;
+import { Card } from "react-bulma-components";
+import { Link } from "react-router-dom";
+
+const SnapCard = ({ snap }) => {
+  let last_date;
+  if (snap["snap/update_date"]) {
+    last_date = `Updated ${timeConverter(parseInt(snap["snap/update_date"]))}`;
+  } else {
+    last_date = `Created ${timeConverter(parseInt(snap["snap/create_date"]))}`;
+  }
+
+  const snap_detail = `snap/${snap["snap/id"]}`;
+
   return (
-    <table role="grid">
-      <tbody>
-        <tr>
-          <th>ID</th>
-          <th>Name</th>
-          <th>Content</th>
-          <th>Author</th>
-          <th>Language</th>
-          <th>Last update</th>
-        </tr>
-        <tr>
-          <td>{snap["snap/id"]}</td>
-          <td>{snap["snap/name"]}</td>
-          <td>
-            <code>{snap["snap/content"]}</code>
-          </td>
-          <td>{snap["user/username"]}</td>
-          <td>{snap["language/name"]}</td>
-          <td>{snap["snap/update_date"]}</td>
-        </tr>
-      </tbody>
-    </table>
+    <Card>
+      <Card.Content>
+        <Link to={snap_detail} relative="route">
+          <p className="title">{snap["snap/name"]}</p>
+        </Link>
+        <p className="subtitle">
+          <a href="/">{snap["user/username"]}</a>
+        </p>
+      </Card.Content>
+      <Card.Footer>
+        <Card.Footer.Item>
+          {/* <span>Written in {capitalize(snap["language/name"])}</span> */}
+          <span>Written in {snap["language/name"]}</span>
+        </Card.Footer.Item>
+        <Card.Footer.Item>
+          <span>{last_date}</span>
+        </Card.Footer.Item>
+      </Card.Footer>
+    </Card>
   );
 };
 

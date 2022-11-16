@@ -2,6 +2,8 @@ import localforage from "localforage";
 import { matchSorter } from "match-sorter";
 import sortBy from "sort-by";
 
+///////////////// TO BE REMOVED
+
 export async function getContacts(query) {
   await fakeNetwork(`getContacts:${query}`);
   let contacts = await localforage.getItem("contacts");

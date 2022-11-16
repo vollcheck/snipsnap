@@ -10,7 +10,7 @@ import ErrorPage from "./error-page";
 import Index from "./routes/Index";
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { action as destroyAction } from "./routes/DeleteSnap";
+import { action as destroySnapAction } from "./routes/DeleteSnap";
 
 const router = createBrowserRouter([
   {
@@ -38,8 +38,11 @@ const router = createBrowserRouter([
           },
           {
             path: "snap/:snapId/destroy",
-            action: destroyAction,
+            action: destroySnapAction,
             errorElement: <div>Oops! There was an error.</div>,
+          },
+          {
+            path: "me",
           },
         ],
       },

@@ -11,8 +11,10 @@ import {
 import { getHealthcheck, listSnaps, upsertSnap } from "./client";
 import { useEffect, useState } from "react";
 
+import Navbar from "./components/Navbar";
 import SnapCard from "./components/SnapCard";
 import SnapList from "./components/SnapList";
+import SnapPreview from "./components/SnapPreview";
 
 const SnapApp = () => {
   const [message, setMessage] = useState("");
@@ -37,7 +39,7 @@ const SnapApp = () => {
     <main className="container">
       <h1>Hello, world!</h1>
       <h3>{message}</h3>
-      <SnapCard snap={snaps[0]} />
+      <SnapPreview snap={snaps[0]} />
       <SnapList snaps={snaps} />
     </main>
   );
@@ -64,16 +66,14 @@ const Root = () => {
     navigation.location &&
     new URLSearchParams(navigation.location.search).has("q");
 
-  // console.log(snaps[0]['user/username'])
-
   useEffect(() => {
     document.getElementById("q").value = q;
   }, [q]);
 
   return (
     <>
-      <div id="topbar">
-        <h1>Snipsnap</h1>
+      <div>
+        <Navbar />
       </div>
 
       <div id="sidebar">
@@ -105,25 +105,28 @@ const Root = () => {
         <nav>
           {snaps.length ? (
             <ul>
-              {snaps.map((snap) => (
-                <li key={snap["snap/id"]}>
-                  <NavLink
-                    to={`snap/${snap["snap/id"]}`}
-                    className={({ isActive, isPending }) =>
-                      isActive ? "active" : isPending ? "pending" : ""
-                    }
-                  >
-                    {snap["user/username"] || snap["snap/name"] ? (
-                      <>
-                        <span>
-                          {snap["user/username"]} / {snap["snap/name"]}
-                        </span>
-                      </>
-                    ) : (
-                      <i>No snap name</i>
-                    )}{" "}
-                    {snap["language/name"]}
-                  </NavLink>
+              {snaps.map((snap, index) => (
+                // <li key={snap["snap/id"]}>
+                //   <NavLink
+                //     to={`snap/${snap["snap/id"]}`}
+                //     className={({ isActive, isPending }) =>
+                //       isActive ? "active" : isPending ? "pending" : ""
+                //     }
+                //   >
+                //     {snap["user/username"] || snap["snap/name"] ? (
+                //       <>
+                //         <span>
+                //           {snap["user/username"]} / {snap["snap/name"]}
+                //         </span>
+                //       </>
+                //     ) : (
+                //       <i>No snap name</i>
+                //     )}{" "}
+                //     {snap["language/name"]}
+                //   </NavLink>
+                // </li>
+                <li key={index}>
+                  <SnapCard snap={snap} />
                 </li>
               ))}
             </ul>
