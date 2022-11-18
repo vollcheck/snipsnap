@@ -1,6 +1,7 @@
+import { Card, Container } from "react-bulma-components";
 import { capitalize, timeConverter } from "../utils";
 
-import { Card } from "react-bulma-components";
+import { Box } from "react-bulma-components";
 import { Link } from "react-router-dom";
 
 const SnapCard = ({ snap }) => {
@@ -11,28 +12,31 @@ const SnapCard = ({ snap }) => {
     last_date = `Created ${timeConverter(parseInt(snap["snap/create_date"]))}`;
   }
 
+  const snap_lang = snap["language/name"]
+    ? `Written in ${capitalize(snap["language/name"])}`
+    : "-";
   const snap_detail = `snap/${snap["snap/id"]}`;
 
   return (
-    <Card>
-      <Card.Content>
+    <Container>
+      <Box>
         <Link to={snap_detail} relative="route">
-          <p className="title">{snap["snap/name"]}</p>
+          <p className="title is-1">{snap["snap/name"]}</p>
+          <p className="subtitle is-3">
+            <a href="/">{snap["user/username"]}</a>
+          </p>
+          <Card.Footer>
+            <Card.Footer.Item>
+              {/* <span>Written in {capitalize(snap["language/name"])}</span> */}
+              <span>{snap_lang}</span>
+            </Card.Footer.Item>
+            <Card.Footer.Item>
+              <span>{last_date}</span>
+            </Card.Footer.Item>
+          </Card.Footer>
         </Link>
-        <p className="subtitle">
-          <a href="/">{snap["user/username"]}</a>
-        </p>
-      </Card.Content>
-      <Card.Footer>
-        <Card.Footer.Item>
-          {/* <span>Written in {capitalize(snap["language/name"])}</span> */}
-          <span>Written in {snap["language/name"]}</span>
-        </Card.Footer.Item>
-        <Card.Footer.Item>
-          <span>{last_date}</span>
-        </Card.Footer.Item>
-      </Card.Footer>
-    </Card>
+      </Box>
+    </Container>
   );
 };
 

@@ -3,5 +3,8 @@ export const timeConverter = (timestamp) => {
 };
 
 export const capitalize = (s) => {
-  return s.charAt(0).toUpperCase() + s.slice(1);
+  return s
+    .split(" ")
+    .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
+    .join(" ");
 };

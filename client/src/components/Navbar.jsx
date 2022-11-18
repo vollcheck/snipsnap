@@ -1,4 +1,4 @@
-import { BASE_FRONTEND_URL } from "../config";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   return (
@@ -8,10 +8,10 @@ const Navbar = () => {
       aria-label="main navigation"
     >
       <div className="navbar-brand">
-        <a className="navbar-item" href={BASE_FRONTEND_URL}>
+        <Link className="navbar-item" to="/">
           {/* <img src="snap.png" width="128" height="128" /> */}
           Snipsnap
-        </a>
+        </Link>
         <a
           role="button"
           className="navbar-burger"

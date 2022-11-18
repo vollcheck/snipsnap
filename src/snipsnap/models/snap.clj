@@ -30,10 +30,11 @@ order by name")]))
 
   snap/id, snap/name, etc, user/username"
   [db]
-  (sql/query (db) ["select s.id, s.name, u.username
+  (sql/query (db) ["select s.*, s.create_date, u.username, l.name
  from snap s
+ left join language l on s.language_id = l.id
  left join user u on s.user_id = u.id
-order by name"]))
+ order by name"]))
 
 (defn save-snap
   "Save a snap record. If ID is present and not zero, then
