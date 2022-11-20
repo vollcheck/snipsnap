@@ -87,3 +87,49 @@ const SnapApp = () => {
       >
         <Outlet />
       </div>
+
+
+-- snap edit/delete
+
+// return (
+  //   <div id="snap">
+  //     <div>
+  //       <Form action="edit">
+  //         <button type="submit">Edit</button>
+  //       </Form>
+  //       <Form
+  //         method="post"
+  //         action="destroy"
+  //         onSubmit={(event) => {
+  //           if (
+  //             !window.confirm("Please confirm you want to delete this record.")
+  //           ) {
+  //             event.preventDefault();
+  //           }
+  //         }}
+  //       >
+  //         <button type="submit">Delete</button>
+  //       </Form>
+  //     </div>
+
+  //     <div>
+  //       <h2>
+  //         {snap["user/username"] || snap["snap/name"] ? (
+  //           <>
+  //             {snap["user/username"]} / {snap["snap/name"]}
+  //           </>
+  //         ) : (
+  //           <i>No Name</i>
+  //         )}{" "}
+  //       </h2>
+
+  //       {snap["language/name"] && <p>Language: {snap["language/name"]}</p>}
+
+  //       {snap["snap/create_date"] && <p>Created: {snap["snap/create_date"]}</p>}
+
+  //       {snap["snap/update_date"] && <p>Updated: {snap["snap/update_date"]}</p>}
+
+  //       {snap["snap/content"] && <code>{snap["snap/content"]}</code>}
+  //     </div>
+  //   </div>
+  // );

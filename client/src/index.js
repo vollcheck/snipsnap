@@ -1,5 +1,6 @@
 import EditSnap, { action as editAction } from "./routes/EditSnap";
-import Root, { action as rootAction, loader as rootLoader } from "./Root";
+import Index, { loader as indexLoader } from "./routes/Index";
+import Root, { action as rootAction } from "./Root";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Snap, {
   action as snapAction,
@@ -7,7 +8,6 @@ import Snap, {
 } from "./routes/Snap";
 
 import ErrorPage from "./error-page";
-import Index from "./routes/Index";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { action as destroySnapAction } from "./routes/DeleteSnap";
@@ -17,13 +17,12 @@ const router = createBrowserRouter([
     path: "/",
     element: <Root />,
     errorElement: <ErrorPage />,
-    loader: rootLoader,
     action: rootAction,
     children: [
       {
         errorElement: <ErrorPage />,
         children: [
-          { index: true, element: <Index /> },
+          { index: true, element: <Index />, loader: indexLoader },
           {
             path: "snap/:snapId",
             element: <Snap />,

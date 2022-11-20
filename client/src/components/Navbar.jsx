@@ -42,7 +42,10 @@ const Navbar = () => {
         <div className="navbar-end">
           <div className="navbar-item">
             <div className="buttons">
-              <a className="button is-primary" href="/">
+              <a className="button is-success is-light" href="/">
+                <strong>New snap</strong>
+              </a>
+              <a className="button is-primary is-light" href="/">
                 <strong>Sign up</strong>
               </a>
               <a className="button is-light" href="/">

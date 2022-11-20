@@ -1,4 +1,6 @@
-import { Form, useFetcher, useLoaderData } from "react-router-dom";
+import { Box, Card, Container, Content } from "react-bulma-components";
+import { Form, Link, useFetcher, useLoaderData } from "react-router-dom";
+import { capitalize, timeConverter } from "../utils";
 import { getSnap, login, test_cors, upsertSnap } from "../client";
 
 import SnapCard from "../components/SnapCard";
@@ -14,19 +16,6 @@ export async function loader({ params }) {
   return snap;
 }
 
-// TODO: to remove
-const snapToRemove = {
-  "snap/id": 1,
-  "snap/user_id": 1,
-  "user/username": "vollcheck",
-  "snap/name": "sum of two integers",
-  "snap/content": "(defn sum [x y] (+ x y))",
-  "snap/language_id": 1,
-  "language/name": "Clojure",
-  "snap/create_date": null,
-  "snap/update_date": null,
-};
-
 export async function action({ request, params }) {
   let formData = await request.formData();
   return upsertSnap(params.snapId, {
@@ -38,75 +27,40 @@ export default function Snap() {
   const snap = useLoaderData();
   console.log(snap);
 
-  // const creds = { username: "vollcheck", password: "admin" };
-  // const user = test_cors(creds);
-  // console.log(user);
+  // Do not tell anybody that this is repeated code
+  let last_date;
+  if (snap["snap/update_date"]) {
+    last_date = `Updated ${timeConverter(parseInt(snap["snap/update_date"]))}`;
+  } else {
+    last_date = `Created ${timeConverter(parseInt(snap["snap/create_date"]))}`;
+  }
 
-  // return (
-  //   <div id="snap">
-  //     <div>
-  //       <Form action="edit">
-  //         <button type="submit">Edit</button>
-  //       </Form>
-  //       <Form
-  //         method="post"
-  //         action="destroy"
-  //         onSubmit={(event) => {
-  //           if (
-  //             !window.confirm("Please confirm you want to delete this record.")
-  //           ) {
-  //             event.preventDefault();
-  //           }
-  //         }}
-  //       >
-  //         <button type="submit">Delete</button>
-  //       </Form>
-  //     </div>
+  const snap_lang = snap["language/name"]
+    ? `Written in ${capitalize(snap["language/name"])}`
+    : "-";
 
-  //     <div>
-  //       <h2>
-  //         {snap["user/username"] || snap["snap/name"] ? (
-  //           <>
-  //             {snap["user/username"]} / {snap["snap/name"]}
-  //           </>
-  //         ) : (
-  //           <i>No Name</i>
-  //         )}{" "}
-  //       </h2>
-
-  //       {snap["language/name"] && <p>Language: {snap["language/name"]}</p>}
-
-  //       {snap["snap/create_date"] && <p>Created: {snap["snap/create_date"]}</p>}
-
-  //       {snap["snap/update_date"] && <p>Updated: {snap["snap/update_date"]}</p>}
-
-  //       {snap["snap/content"] && <code>{snap["snap/content"]}</code>}
-  //     </div>
-  //   </div>
-  // );
-
-  return <SnapCard snap={snap} />;
+  return (
+    <Container>
+      <Box>
+        {/* TODO: edit */}
+        {/* TODO: delete */}
+        <p className="title is-1">{snap["snap/name"]}</p>
+        <p className="subtitle is-3">
+          <a href="/">{snap["user/username"]}</a>
+        </p>
+        <Content>
+          <code>{snap["snap/content"]}</code>
+        </Content>
+        <Card.Footer>
+          <Card.Footer.Item>
+            {/* <span>Written in {capitalize(snap["language/name"])}</span> */}
+            <span>{snap_lang}</span>
+          </Card.Footer.Item>
+          <Card.Footer.Item>
+            <span>{last_date}</span>
+          </Card.Footer.Item>
+        </Card.Footer>
+      </Box>
+    </Container>
+  );
 }
-
-// function Favorite({ snap }) {
-//   const fetcher = useFetcher();
-//   // yes, this is a `let` for later
-//   let favorite = snap["language/name"];
-//   if (fetcher.formData) {
-//     favorite = fetcher.formData.get("favorite") === "true";
-//   }
-
-//   return (
-//     <fetcher.Form method="post">
-//       <button
-//         name="favorite"
-//         value={favorite ? "false" : "true"}
-//         aria-label={favorite ? "Remove from favorites" : "Add to favorites"}
-//       >
-//         {favorite ? "★" : "☆"}
-//       </button>
-//     </fetcher.Form>
-//   );
-// }
-
-// <Favorite snap={snap} />;

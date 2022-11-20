@@ -12,15 +12,6 @@ import Navbar from "./components/Navbar";
 import SnapList from "./components/SnapList";
 import SnipSnapFooter from "./components/Footer";
 
-export async function loader({ request }) {
-  // const url = new URL(request.url);
-  // const q = url.searchParams.get("q");
-  // const snaps = await listSnaps(q);
-  // return { snaps, q };
-  const snaps = await listSnaps();
-  return { snaps };
-}
-
 export async function action() {
   const snap = await upsertSnap();
   return redirect(`/snap/${snap.id}/edit`);
@@ -28,7 +19,6 @@ export async function action() {
 
 const Root = () => {
   // const { snaps, q } = useLoaderData();
-  const { snaps } = useLoaderData();
   const navigation = useNavigation();
   // const submit = useSubmit();
 
@@ -42,10 +32,11 @@ const Root = () => {
 
   return (
     <>
-      <Navbar />
-      <SnapList snaps={snaps} />
-      <Outlet />
-      <SnipSnapFooter />
+      <div className="container hero is-fullheight">
+        <Navbar />
+        <Outlet />
+        <SnipSnapFooter />
+      </div>
     </>
   );
 };
