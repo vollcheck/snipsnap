@@ -1,7 +1,9 @@
 import EditSnap, { action as editAction } from "./routes/EditSnap";
 import Index, { loader as indexLoader } from "./routes/Index";
+import Login, { action as loginAction } from "./components/Login";
 import Root, { action as rootAction } from "./Root";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import SignUp, { action as signUpAction } from "./routes/SignUp";
 import Snap, {
   action as snapAction,
   loader as snapLoader,
@@ -39,6 +41,16 @@ const router = createBrowserRouter([
             path: "snap/:snapId/destroy",
             action: destroySnapAction,
             errorElement: <div>Oops! There was an error.</div>,
+          },
+          {
+            path: "sign-up",
+            element: <SignUp />,
+            action: signUpAction,
+          },
+          {
+            path: "login",
+            element: <Login />,
+            // action: loginAction,
           },
           {
             path: "me",
