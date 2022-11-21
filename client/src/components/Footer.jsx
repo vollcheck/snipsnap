@@ -4,7 +4,7 @@ export default function SnipSnapFooter() {
   return (
     <>
       {/* <Hero.Footer> */}
-      <Footer>
+      <Footer style={{ margin: "-1rem" }}>
         {/* <Container> */}
         <Content style={{ textAlign: "center" }}>
           <p>

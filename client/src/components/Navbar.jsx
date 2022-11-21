@@ -48,7 +48,7 @@ const Navbar = () => {
               <a className="button is-primary is-light" href="/">
                 <strong>Sign up</strong>
               </a>
-              <a className="button is-light" href="/">
+              <a className="button is-light" href="/login">
                 Log in
               </a>
             </div>

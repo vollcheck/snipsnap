@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import Navbar from "./components/Navbar";
 import SnapList from "./components/SnapList";
 import SnipSnapFooter from "./components/Footer";
+import useToken from "./components/useToken";
 
 export async function action() {
   const snap = await upsertSnap();
@@ -29,6 +30,8 @@ const Root = () => {
   // useEffect(() => {
   //   document.getElementById("q").value = q;
   // }, [q]);
+
+  const { token, setToken } = useToken();
 
   return (
     <>
