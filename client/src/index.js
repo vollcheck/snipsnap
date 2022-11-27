@@ -1,18 +1,23 @@
-import EditSnap, { action as editAction } from "./routes/EditSnap";
-import Index, { loader as indexLoader } from "./routes/Index";
+import EditSnap, { action as editAction } from "./components/EditSnap";
+import Index, { loader as indexLoader } from "./components/Index";
 import Login, { action as loginAction } from "./components/Login";
 import Root, { action as rootAction } from "./Root";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import SignUp, { action as signUpAction } from "./routes/SignUp";
+import {
+  RouterProvider,
+  createBrowserRouter,
+  useRouteLoaderData,
+} from "react-router-dom";
+import SignUp, { action as signUpAction } from "./components/SignUp";
 import Snap, {
   action as snapAction,
   loader as snapLoader,
-} from "./routes/Snap";
+} from "./components/Snap";
+import UserList, { loader as userListLoader } from "./components/UserList";
 
 import ErrorPage from "./error-page";
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { action as destroySnapAction } from "./routes/DeleteSnap";
+import { action as destroySnapAction } from "./components/DeleteSnap";
 
 const router = createBrowserRouter([
   {
@@ -41,6 +46,11 @@ const router = createBrowserRouter([
             path: "snap/:snapId/destroy",
             action: destroySnapAction,
             errorElement: <div>Oops! There was an error.</div>,
+          },
+          {
+            path: "users",
+            element: <UserList />,
+            loader: userListLoader,
           },
           {
             path: "sign-up",

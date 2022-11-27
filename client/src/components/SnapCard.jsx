@@ -26,14 +26,14 @@ const SnapCard = ({ snap, index }) => {
           <p className="subtitle is-3">
             <a href="/">{snap["user/username"]}</a>
           </p>
-          <Card.Footer>
+          {/* <Card.Footer>
             <Card.Footer.Item>
               <span>{snap_lang}</span>
             </Card.Footer.Item>
             <Card.Footer.Item>
               <span>{last_date}</span>
             </Card.Footer.Item>
-          </Card.Footer>
+          </Card.Footer> */}
         </Link>
       </Box>
     </Container>

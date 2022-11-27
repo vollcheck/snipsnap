@@ -38,8 +38,8 @@ const Root = () => {
       <div className="container hero is-fullheight">
         <Navbar />
         <Outlet />
-        <SnipSnapFooter />
       </div>
+      <SnipSnapFooter />
     </>
   );
 };

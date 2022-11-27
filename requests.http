@@ -15,6 +15,11 @@ GET :url/snap/1
 
 ###
 
+GET :url/users
+:json
+
+###
+
 GET :url/user/vollcheck
 :json
 

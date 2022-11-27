@@ -49,7 +49,7 @@ export default function Snap() {
           <a href="/">{snap["user/username"]}</a>
         </p>
         <Content>
-          <code>{snap["snap/content"]}</code>
+          <pre>{snap["snap/content"]}</pre>
         </Content>
         <Card.Footer>
           <Card.Footer.Item>

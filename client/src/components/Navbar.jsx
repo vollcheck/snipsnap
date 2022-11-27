@@ -30,9 +30,9 @@ const Navbar = () => {
             Snaps
           </a>
 
-          <a className="navbar-item" href="/">
+          <Link className="navbar-item" to="/users">
             Users
-          </a>
+          </Link>
 
           <a className="navbar-item" href="/">
             Your profile

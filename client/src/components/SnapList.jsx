@@ -1,4 +1,5 @@
 import SnapCard from "./SnapCard";
+
 const SnapList = ({ snaps }) => {
   return (
     <>
