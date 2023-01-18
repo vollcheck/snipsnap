@@ -29,6 +29,14 @@
                data)]
     (r/response data)))
 
+(defn read-user-snaps
+  "List all snaps by user."
+  [req]
+  (let [username (get-in req [:params :username])
+        db (get-in req [:application/component :database])
+        data (user/get-snaps-by-user db username)]
+    (r/response data)))
+
 (defn delete-user
   [req]
   (let [db (get-in req [:application/component :database])

@@ -66,9 +66,8 @@ create table user (
         (catch Exception e
           (println "Exception:" (ex-message e))
           (println "Unable to populate the initial data -- proceed with caution!")))
-      (catch Exception e
-        (println "Exception:" (ex-message e))
-        (println "Looks like the database is already setup?")))))
+      (catch Exception _
+        (println "Looks like the database is already setup. Squashing SQL error.")))))
 
 ;; database component
 (defrecord Database [db-spec     ; configuration

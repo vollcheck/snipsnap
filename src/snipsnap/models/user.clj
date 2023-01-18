@@ -33,6 +33,14 @@
                                   :from [:user]
                                   :where [:= :username username]}))))
 
+(defn get-snaps-by-user
+  [db username]
+  (sql/query (db)
+             (hsql/format {:select [:snap.* :user.username]
+                           :from [:snap]
+                           :left-join [[:user] [:= :snap.user_id :user.id]]
+                           :where [:= :user.username username]})))
+
 (defn get-user-by-credentials
   "Get user ID and username for the login token hash."
   [db data]
@@ -47,6 +55,16 @@
 
 (comment
   (def db (:database snipsnap.main/system))
+  ;; select s.*, u.username
+  ;; from snap s
+  ;; left join user u on u.id = s.user_id
+  ;; where u.username = 'vollcheck';
+  (def username "vollcheck")
+  (sql/query (db)
+             (hsql/format {:select [:snap.* :user.username]
+                           :from [:snap]
+                           :left-join [[:user] [:= :snap.user_id :user.id]]
+                           :where [:= :user.username username]}))
   (get-user-by-credentials db {"username" "another", "password" "admin"})
   )
 

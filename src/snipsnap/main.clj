@@ -75,11 +75,10 @@
   (fn [req]
     (let [resp (handler req)]
       (if (resp/response? resp)
-        (do (prn (:headers resp))
-            (-> resp
-                (assoc-in [:headers "Access-Control-Allow-Origin"] "http://localhost:3000")
-                (assoc-in [:headers "Access-Control-Allow-Methods"] "*")
-                (assoc-in [:headers "Access-Control-Allow-Headers"] "*")))
+        (-> resp
+            (assoc-in [:headers "Access-Control-Allow-Origin"] "http://localhost:3000")
+            (assoc-in [:headers "Access-Control-Allow-Methods"] "*")
+            (assoc-in [:headers "Access-Control-Allow-Headers"] "*"))
         "no response"))))
 
 ;; Helper for building the middleware:
@@ -159,34 +158,23 @@
   (let-routes [wrap (middleware-stack application #'my-middleware)
                auth-wrap (auth-stack application #'my-middleware)]
     ;; dashboard
-    (GET  "/"                [] (wrap #'core-ctl/dashboard))
+    (GET  "/"           [] (wrap #'core-ctl/dashboard))
 
     ;; auth
-    (POST   "/register"       [] (wrap #'auth-ctl/register))
-    (OPTIONS   "/login"          []
-               (let [r (wrap #'auth-ctl/login)]
-                 (prn r)
-                 r))
-    (POST   "/login"          []
-            (let [r (wrap #'auth-ctl/login)]
-              (prn r)
-              r))
-    (OPTIONS "/me"             []
-            (let [r (auth-wrap #'auth-ctl/me)]
-              (prn r)
-              r))
-    (GET    "/me"             []
-            (let [r (auth-wrap #'auth-ctl/me)]
-              (prn r)
-              r))
+    (POST    "/register" [] (wrap #'auth-ctl/register))
+    (OPTIONS "/login"    [] (wrap #'auth-ctl/login))
+    (POST    "/login"    [] (wrap #'auth-ctl/login))
+    (OPTIONS "/me"       [] (auth-wrap #'auth-ctl/me))
+    (GET     "/me"       [] (auth-wrap #'auth-ctl/me))
 
 
     ;; user
-    (GET    "/users"          []  (wrap #'user-ctl/user-list))
-    (GET    "/user/:username" [_] (wrap #'user-ctl/read-user))
+    (GET    "/users"                []  (wrap #'user-ctl/user-list))
+    (GET    "/user/:username"       [_] (wrap #'user-ctl/read-user))
+    (GET    "/user/:username/snaps" [_] (wrap #'user-ctl/read-user-snaps))
     ;; TODO: only edit, creation is being done using register
-    (POST   "/user/"          [_] (auth-wrap #'user-ctl/create-or-update-user))
-    (DELETE "/user/:username" [_] (auth-wrap #'user-ctl/delete-user))
+    (POST   "/user/"                [_] (auth-wrap #'user-ctl/create-or-update-user))
+    (DELETE "/user/:username"       [_] (auth-wrap #'user-ctl/delete-user))
 
     ;; snap
     (GET    "/snaps"        []              (wrap #'snap-ctl/snap-list))
@@ -270,8 +258,6 @@
   (component/using (map->ApiServer {:handler-fn handler-fn
                                     :port port})
                    [:application]))
-
-
 
 ;; This is the piece that combines the generic web server component above with
 ;; your application-specific component defined at the top of the file, and
