@@ -22,7 +22,7 @@ or _Run the tests_ or _Build an Uberjar_.
 clojure -M -m snipsnap.main
 ```
 
-It should create a SQLite database (`snipsnap_db`) and populate two tables (`department` and `addressbook`) and start a Jetty instance on port 8080.
+It should create a SQLite database (`snipsnap_db`) and populate couple tables (to be confirmed) and start a Jetty instance on port 8080.
 
 If that port is in use, start it on a different port. For example, port 8100:
 

@@ -171,7 +171,7 @@
     ;; user
     (GET    "/users"                []  (wrap #'user-ctl/user-list))
     (GET    "/user/:username"       [_] (wrap #'user-ctl/read-user))
-    (GET    "/user/:username/snaps" [_] (wrap #'user-ctl/read-user-snaps))
+    (GET    "/user/:username/snaps" [_] (auth-wrap #'user-ctl/read-user-snaps))
     ;; TODO: only edit, creation is being done using register
     (POST   "/user/"                [_] (auth-wrap #'user-ctl/create-or-update-user))
     (DELETE "/user/:username"       [_] (auth-wrap #'user-ctl/delete-user))
