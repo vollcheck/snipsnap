@@ -1,5 +1,6 @@
 import { BASE_BACKEND_URL } from "./config";
 import axios from "axios";
+import { cloneElement } from "react";
 
 // -- Client defintion
 const client = axios.create({
@@ -62,7 +63,23 @@ export const deleteUser = async (username) => {
     .then((response) => response.data);
 };
 
+export const getUserSnaps = async (username) => {
+  return await client
+    .get(`/user/${username}/snaps`)
+    .then((response) => response.data);
+};
+
 // -- Auth endpoints
+// const createAuthClient = (token) => {
+//   return axios.create({
+//     baseURL: BASE_BACKEND_URL,
+//     headers: {
+//       "Content-Type": "application/json",
+//       Authorization: `Token ${token})}`,
+//     },
+//   });
+// };
+
 export const register = async (data) => {
   return await client.post("/register", data).then((response) => response.data);
 };
@@ -71,8 +88,11 @@ export const login = async (data) => {
   return await client.post("/login", data).then((response) => response.data);
 };
 
-export const me = async (data) => {
-  return await client.get("/me", data).then((response) => response.data);
+export const getMe = async (token) => {
+  // Alter defaults after instance has been created
+  client.defaults.headers.common["Authorization"] = `Token ${token}`;
+
+  return await client.get("/me").then((response) => response.data.body.user);
 };
 
 export const test_cors = async (data) => {

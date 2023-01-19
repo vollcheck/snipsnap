@@ -1,6 +1,7 @@
 import EditSnap, { action as editAction } from "./components/EditSnap";
 import Index, { loader as indexLoader } from "./components/Index";
 import Login, { action as loginAction } from "./components/Login";
+import Me, { loader as meLoader } from "./components/Me";
 import Root, { action as rootAction } from "./Root";
 import {
   RouterProvider,
@@ -13,6 +14,7 @@ import Snap, {
   loader as snapLoader,
 } from "./components/Snap";
 import UserList, { loader as userListLoader } from "./components/UserList";
+import UserProfile, { loader as userLoader } from "./components/UserProfile";
 
 import ErrorPage from "./error-page";
 import React from "react";
@@ -53,6 +55,11 @@ const router = createBrowserRouter([
             loader: userListLoader,
           },
           {
+            path: "user/:username",
+            element: <UserProfile />,
+            loader: userLoader,
+          },
+          {
             path: "sign-up",
             element: <SignUp />,
             action: signUpAction,
@@ -64,6 +71,8 @@ const router = createBrowserRouter([
           },
           {
             path: "me",
+            element: <Me />,
+            loader: meLoader,
           },
         ],
       },

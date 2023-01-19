@@ -4,7 +4,7 @@ const SnapList = ({ snaps }) => {
   return (
     <>
       {snaps.length ? (
-        snaps.map((snap, index) => <SnapCard snap={snap} index={index} />)
+        snaps.map((snap, index) => <SnapCard snap={snap} key={index} />)
       ) : (
         <p>
           <i>No snaps!</i>

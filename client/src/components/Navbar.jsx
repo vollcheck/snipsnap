@@ -9,7 +9,6 @@ const Navbar = () => {
     >
       <div className="navbar-brand">
         <Link className="navbar-item" to="/">
-          {/* <img src="snap.png" width="128" height="128" /> */}
           Snipsnap
         </Link>
         <a
@@ -26,31 +25,31 @@ const Navbar = () => {
       </div>
       <div id="navbarBasicExample" className="navbar-menu">
         <div className="navbar-start">
-          <a className="navbar-item" href="/">
+          <Link className="navbar-item" to="/">
             Snaps
-          </a>
+          </Link>
 
           <Link className="navbar-item" to="/users">
             Users
           </Link>
 
-          <a className="navbar-item" href="/">
+          <Link className="navbar-item" to="/me">
             Your profile
-          </a>
+          </Link>
         </div>
 
         <div className="navbar-end">
           <div className="navbar-item">
             <div className="buttons">
-              <a className="button is-success is-light" href="/">
+              <Link className="button is-success is-light" to="/sign-up">
                 <strong>New snap</strong>
-              </a>
-              <a className="button is-primary is-light" href="/">
+              </Link>
+              <Link className="button is-primary is-light" to="/sign-up">
                 <strong>Sign up</strong>
-              </a>
-              <a className="button is-light" href="/login">
+              </Link>
+              <Link className="button is-light" to="/login">
                 Log in
-              </a>
+              </Link>
             </div>
           </div>
         </div>

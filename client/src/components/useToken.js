@@ -2,12 +2,12 @@ import { useState } from "react";
 
 export default function useToken() {
   const saveToken = (token) => {
-    localStorage.setItem("token", token);
+    localStorage.setItem("snipsnap-token", token);
     setToken(token);
   };
 
   const getToken = () => {
-    return localStorage.getItem("token");
+    return localStorage.getItem("snipsnap-token");
   };
 
   const [token, setToken] = useState(getToken());

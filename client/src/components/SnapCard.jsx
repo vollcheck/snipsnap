@@ -20,20 +20,18 @@ const SnapCard = ({ snap, index }) => {
 
   return (
     <Container id={snap_index}>
-      <Box>
-        <Link to={snap_detail} style={{ display: "block" }} relative="route">
-          <p className="title is-1">{snap["snap/name"]}</p>
-          <p className="subtitle is-3">
-            <a href="/">{snap["user/username"]}</a>
-          </p>
-          {/* <Card.Footer>
-            <Card.Footer.Item>
-              <span>{snap_lang}</span>
-            </Card.Footer.Item>
-            <Card.Footer.Item>
-              <span>{last_date}</span>
-            </Card.Footer.Item>
-          </Card.Footer> */}
+      <Box style={{ margin: "1rem" }}>
+        <p className="subtitle is-4">
+          <a href="/">{snap["user/username"]}</a>
+        </p>
+
+        <Link
+          to={snap_detail}
+          style={{ display: "block" }}
+          relative="route"
+          className="title is-1"
+        >
+          {snap["snap/name"]}
         </Link>
       </Box>
     </Container>

@@ -15,8 +15,8 @@ export default function Index() {
   const { snaps } = useLoaderData();
 
   return (
-    <p id="zero-state">
+    <div id="zero-state">
       <SnapList snaps={snaps} />
-    </p>
+    </div>
   );
 }

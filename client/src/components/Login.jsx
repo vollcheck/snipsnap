@@ -1,31 +1,28 @@
 import { Box, Button, Container, Form, Icon } from "react-bulma-components";
+import { Form as RouterForm, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
-import { Form as RouterForm } from "react-router-dom";
 import { login } from "../client";
-import { useState } from "react";
+import useToken from "./useToken";
 
 export async function action({ request, params }) {
   console.log(await request.formData());
   return 0;
 }
 
-const setToken = (token) => {
-  localStorage.setItem("token", token);
-  return 0;
-};
-
-const getToken = () => {
-  const token = localStorage.getItem("token");
-  return token;
-};
-
 export default function Login() {
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
-
   const [error, setError] = useState(null);
+  const { token, setToken } = useToken();
+  const navigate = useNavigate();
 
-  // const { token, setToken } = useToken();
+  useEffect(() => {
+    if (token) {
+      console.log("i'm already authenticated!");
+      navigate("/");
+    }
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -38,16 +35,15 @@ export default function Login() {
     if (response.status === 404) {
       setError(response.body.error);
     } else if (response.status === 200) {
-      const token = response.body.token;
-      console.log(token);
-      setToken(token);
+      const receivedToken = response.body.token;
+      console.log("I have a token: " + receivedToken);
+      setToken(receivedToken);
+      navigate(-1); // navigate to the previous page
     }
-    console.log(response);
-    // setToken(token);
   };
 
   return (
-    <Box>
+    <Box style={{ margin: "auto" }}>
       {/* <RouterForm method="post" action="/login"> */}
       <form onSubmit={handleSubmit}>
         <Form.Field>

@@ -15,6 +15,11 @@ GET :url/snap/1
 
 ###
 
+GET :url/user/vollcheck/snaps
+:json
+
+###
+
 GET :url/users
 :json
 
@@ -72,7 +77,7 @@ POST :url/login
 :json
 
 {"username": "vollcheck",
- "password": "admin"}
+ "password": ""}
 
 ###
 

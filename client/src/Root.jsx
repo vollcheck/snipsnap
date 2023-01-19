@@ -1,17 +1,8 @@
-import {
-  Outlet,
-  redirect,
-  useLoaderData,
-  useNavigation,
-  useSubmit,
-} from "react-router-dom";
-import { getHealthcheck, listSnaps, upsertSnap } from "./client";
-import { useEffect, useState } from "react";
+import { Outlet, redirect, useNavigation } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
-import SnapList from "./components/SnapList";
 import SnipSnapFooter from "./components/Footer";
-import useToken from "./components/useToken";
+import { upsertSnap } from "./client";
 
 export async function action() {
   const snap = await upsertSnap();
@@ -31,15 +22,13 @@ const Root = () => {
   //   document.getElementById("q").value = q;
   // }, [q]);
 
-  const { token, setToken } = useToken();
-
   return (
     <>
       <div className="container hero is-fullheight">
         <Navbar />
         <Outlet />
+        <SnipSnapFooter />
       </div>
-      <SnipSnapFooter />
     </>
   );
 };
