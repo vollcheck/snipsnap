@@ -59,14 +59,7 @@ export default function Login() {
                 return setUsername(e.target.value);
               }}
             />
-            <Icon align="left" size="small">
-              <i className="fas fa-user" />
-            </Icon>
-            <Icon align="right" size="small">
-              <i className="fas fa-check" />
-            </Icon>
           </Form.Control>
-          {/* <Form.Help color="success">This username is available</Form.Help> */}
         </Form.Field>
 
         <Form.Field>
@@ -79,12 +72,6 @@ export default function Login() {
                 return setPassword(e.target.value);
               }}
             />
-            <Icon align="left" size="small">
-              <i className="fas fa-lock" />
-            </Icon>
-            <Icon align="right" size="small">
-              <i className="fas fa-exclamation-triangle" />
-            </Icon>
           </Form.Control>
           {error ? <Form.Help color="danger">{error}</Form.Help> : <br />}
         </Form.Field>
@@ -97,7 +84,6 @@ export default function Login() {
           </Form.Control>
         </Form.Field>
       </form>
-      {/* </RouterForm> */}
     </Box>
   );
 }

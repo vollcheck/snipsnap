@@ -1,9 +1,10 @@
 import { Link } from "react-router-dom";
 import { isAuthenticated } from "../utils";
+import { useState } from "react";
 
 const Navbar = () => {
   const isA = isAuthenticated();
-  console.log(isA);
+  const [activeBurger, setActiveBurger] = useState(false);
 
   return (
     <nav
@@ -17,22 +18,22 @@ const Navbar = () => {
         </Link>
         <a
           role="button"
-          className="navbar-burger"
+          className={activeBurger ? "navbar-burger is-active" : "navbar-burger"}
           aria-label="menu"
           aria-expanded="false"
           data-target="navbarBasicExample"
+          onClick={() => setActiveBurger(!activeBurger)}
         >
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>
           <span aria-hidden="true"></span>
         </a>
       </div>
-      <div id="navbarBasicExample" className="navbar-menu">
+      <div
+        id="navbarBasicExample"
+        className={activeBurger ? "navbar-menu is-active" : "navbar-menu"}
+      >
         <div className="navbar-start">
-          <Link className="navbar-item" to="/">
-            Snaps
-          </Link>
-
           <Link className="navbar-item" to="/users">
             Users
           </Link>

@@ -1,12 +1,7 @@
 #+TITLE: Notes on developing Snipsnap
 
-* [auth] make state check of logged user
-- [X] don't allow to login when the user is logged
-
-* [mobile view] no navbar
-
-* [snap entity] create
-
-* [snap entity] delete
-
-* [snap entity] edit
+- [ ] [snap entity] create
+- [ ] [snap entity] delete
+- [ ] [snap entity] edit
+- [ ] [user entity] register
+- [ ] [mobile view] no navbar on mobile view
