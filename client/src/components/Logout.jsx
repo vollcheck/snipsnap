@@ -1,4 +1,9 @@
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 export default function Logout() {
-  localStorage.removeItem("snipsnap-token");
-  return 0;
+  const navigate = useNavigate();
+  useEffect(() => {
+    localStorage.removeItem("snipsnap-token");
+    navigate("/");
+  }, []);
 }

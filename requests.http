@@ -25,7 +25,7 @@ GET :url/users
 
 ###
 
-GET :url/user/vollcheck
+GET :url/user/another
 :json
 
 ### snap create
@@ -58,6 +58,12 @@ DELETE :url/snap/6
 
 GET :url/
 :json
+
+###
+
+GET :url/my-snaps
+:json
+:auth
 
 ###
 

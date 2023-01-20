@@ -60,8 +60,25 @@ order by name")]))
   [db id]
   (sql/delete! (db) :snap {:id id}))
 
+(defn get-snaps-by-username
+  [db username]
+  (let [query {:select [:s.* :l.name]
+               :from [[:snap :s] [:language :l] [:user :u]]
+               :where [:and
+                       [:= :u.username username]
+                       [:= :s.user_id :u.id]]}]
+    (first (sql/query (db) (hsql/format query)))))
+
 
 (comment
+  (def db (get-in snipsnap.main/system [:database :datasource]))
+  (let [query {:select [:s.* :l.name]
+               :from [[:snap :s] [:language :l] [:user :u]]
+               :where [:and
+                       [:= :u.username "vollcheck"]
+                       [:= :s.user_id :u.id]]}]
+    (first (sql/query db (hsql/format query))))
+
   ;; TODO - transform this `SELECT` with leftjoins to honeysql
   (let [query {:select [:s.* :l.name :u.username]
                :from [[:snap :s] [:language :l] [:user :u]]

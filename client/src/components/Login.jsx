@@ -2,7 +2,9 @@ import { Box, Button, Container, Form, Icon } from "react-bulma-components";
 import { Form as RouterForm, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
+import React from "react";
 import { login } from "../client";
+import { toast } from "react-toastify";
 import useToken from "./useToken";
 
 export async function action({ request, params }) {
@@ -20,6 +22,7 @@ export default function Login() {
   useEffect(() => {
     if (token) {
       console.log("i'm already authenticated!");
+      // toast("You are already logged!");
       navigate("/");
     }
   }, []);
@@ -38,6 +41,7 @@ export default function Login() {
       const receivedToken = response.body.token;
       console.log("I have a token: " + receivedToken);
       setToken(receivedToken);
+      // toast("You are already logged!");
       navigate(-1); // navigate to the previous page
     }
   };

@@ -1,6 +1,10 @@
 import { Link } from "react-router-dom";
+import { isAuthenticated } from "../utils";
 
 const Navbar = () => {
+  const isA = isAuthenticated();
+  console.log(isA);
+
   return (
     <nav
       className="navbar is-white"
@@ -33,23 +37,37 @@ const Navbar = () => {
             Users
           </Link>
 
-          <Link className="navbar-item" to="/me">
-            Your profile
-          </Link>
+          {isA ? (
+            <Link className="navbar-item" to="/me">
+              Your profile
+            </Link>
+          ) : (
+            <></>
+          )}
         </div>
 
         <div className="navbar-end">
           <div className="navbar-item">
             <div className="buttons">
-              <Link className="button is-success is-light" to="/sign-up">
-                <strong>New snap</strong>
-              </Link>
-              <Link className="button is-primary is-light" to="/sign-up">
-                <strong>Sign up</strong>
-              </Link>
-              <Link className="button is-light" to="/login">
-                Log in
-              </Link>
+              {isA ? (
+                <>
+                  <Link className="button is-success is-light" to="/sign-up">
+                    <strong>New snap</strong>
+                  </Link>
+                  <Link className="button is-light" to="/logout">
+                    Log out
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link className="button is-primary is-light" to="/sign-up">
+                    <strong>Sign up</strong>
+                  </Link>
+                  <Link className="button is-light" to="/login">
+                    Log in
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         </div>

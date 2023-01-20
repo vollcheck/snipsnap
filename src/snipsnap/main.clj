@@ -166,12 +166,14 @@
     (POST    "/login"    [] (wrap #'auth-ctl/login))
     (OPTIONS "/me"       [] (auth-wrap #'auth-ctl/me))
     (GET     "/me"       [] (auth-wrap #'auth-ctl/me))
+    ;; (OPTIONS "/my-snaps" [] (auth-wrap #'auth-ctl/my-snaps))
+    ;; (GET     "/my-snaps" [] (auth-wrap #'auth-ctl/my-snaps))
 
 
     ;; user
     (GET    "/users"                []  (wrap #'user-ctl/user-list))
     (GET    "/user/:username"       [_] (wrap #'user-ctl/read-user))
-    (GET    "/user/:username/snaps" [_] (auth-wrap #'user-ctl/read-user-snaps))
+    (GET    "/user/:username/snaps" [_] (wrap #'user-ctl/read-user-snaps))
     ;; TODO: only edit, creation is being done using register
     (POST   "/user/"                [_] (auth-wrap #'user-ctl/create-or-update-user))
     (DELETE "/user/:username"       [_] (auth-wrap #'user-ctl/delete-user))
@@ -297,6 +299,7 @@
   (alter-var-root #'system component/start))
 
 (comment
+  (dev-restart)
   ;; START
   ;; remote controller checkpoint
   (def system (new-system 8888))
@@ -308,7 +311,11 @@
   #_{:clj-kondo/ignore [:unused-namespace]}
   (require '[next.jdbc :as jdbc]
            '[next.jdbc.sql :as sql])
-  (sql/find-by-keys ds :user {:username "vollcheck"})
+  (-> (sql/find-by-keys ds :user {:username "vollcheck"})
+      first
+      :user/username)
+   ;; => "vollcheck"
+
 
   ;; the comma here just "anchors" the closing paren on this line,
   ;; which makes it easier to put you cursor at the end of the lines

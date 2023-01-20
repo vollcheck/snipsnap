@@ -24,6 +24,12 @@ export const getSnap = async (snapId) => {
   return await client.get("/snap/" + snapId).then((response) => response.data);
 };
 
+export const getUserSnaps = async (username) => {
+  return await client
+    .get(`/user/${username}/snaps`)
+    .then((response) => response.data);
+};
+
 export const upsertSnap = async (data) => {
   // TODO: requires auth!
   // for create you need to be authenticated
@@ -44,8 +50,9 @@ export const listUsers = async () => {
 };
 
 export const getUser = async (username) => {
+  console.log(username);
   return await client
-    .get("/user/" + username)
+    .get(`/user/${username}`)
     .then((response) => response.data);
 };
 
@@ -63,23 +70,6 @@ export const deleteUser = async (username) => {
     .then((response) => response.data);
 };
 
-export const getUserSnaps = async (username) => {
-  return await client
-    .get(`/user/${username}/snaps`)
-    .then((response) => response.data);
-};
-
-// -- Auth endpoints
-// const createAuthClient = (token) => {
-//   return axios.create({
-//     baseURL: BASE_BACKEND_URL,
-//     headers: {
-//       "Content-Type": "application/json",
-//       Authorization: `Token ${token})}`,
-//     },
-//   });
-// };
-
 export const register = async (data) => {
   return await client.post("/register", data).then((response) => response.data);
 };
@@ -91,9 +81,26 @@ export const login = async (data) => {
 export const getMe = async (token) => {
   // Alter defaults after instance has been created
   client.defaults.headers.common["Authorization"] = `Token ${token}`;
+  const me = await client
+    .get("/me")
+    .then((response) => response.data.body.user);
 
-  return await client.get("/me").then((response) => response.data.body.user);
+  // const mySnaps = await client
+  //   .get(`/user/${username}/snaps`)
+  //   .then((response) => response.data);
+  // // that's hack as well :^)
+  delete client.defaults.headers.common.Authorization;
+  return me;
 };
+
+// export const isAuthenticated = async (token) => {
+//   // Alter defaults after instance has been created
+//   client.defaults.headers.common["Authorization"] = `Token ${token}`;
+//   return await client
+//     .options("/me")
+//     .then((response) => response.data.body.token)
+//     .catch((_) => false);
+// };
 
 export const test_cors = async (data) => {
   return await client

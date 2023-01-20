@@ -1,36 +1,22 @@
-import {
-  Card,
-  Container,
-  Content,
-  Heading,
-  Image,
-  Media,
-} from "react-bulma-components";
-import { Form, useFetcher, useLoaderData } from "react-router-dom";
-import { capitalize, timeConverter } from "../utils";
-import { getMe, getUserSnaps } from "../client";
-
-import { Box } from "react-bulma-components";
-import { Link } from "react-router-dom";
-import UserProfile from "./UserProfile";
-import useToken from "./useToken";
+import { getMe } from "../client";
+import { useEffect } from "react";
+import { useLoaderData } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export async function loader() {
+  // thats a cheating :^)
   const token = localStorage.getItem("snipsnap-token");
-
   const me = await getMe(token);
-
   const myUsername = me["user/username"];
 
-  const mySnaps = await getUserSnaps(myUsername);
-
-  return me;
+  return myUsername;
 }
 
 export default function Me() {
-  const me = useLoaderData();
-  const myUsername = me["user/username"];
-  console.log(myUsername);
+  const myUsername = useLoaderData();
+  const navigate = useNavigate();
 
-  // return <UserProfile username={me.username} />;
+  useEffect(() => {
+    navigate(`/user/${myUsername}`);
+  }, []);
 }

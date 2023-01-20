@@ -28,7 +28,7 @@ const SnapCard = ({ snap, index }) => {
         <Link
           to={snap_detail}
           style={{ display: "block" }}
-          relative="route"
+          // relative="route"
           className="title is-1"
         >
           {snap["snap/name"]}

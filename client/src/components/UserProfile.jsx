@@ -7,51 +7,36 @@ import {
   Image,
   Media,
 } from "react-bulma-components";
+import { getUser, getUserSnaps } from "../client";
 
 import { Link } from "react-router-dom";
-import { getUser } from "../client";
+import SnapList from "./SnapList";
+import UserCard from "./UserCard";
 import { useLoaderData } from "react-router-dom";
 
-export async function loader({ username }) {
-  const user = getUser(username);
+export async function loader({ params }) {
+  const username = params.username;
+  const user = await getUser(username);
+
   if (!user) {
     throw new Response("", {
       status: 404,
       statusText: "Not found",
     });
   }
-  return user;
+  const userSnaps = await getUserSnaps(user["user/username"]);
+  return { user, userSnaps };
 }
 
-export default function User() {
-  const user = useLoaderData();
-  const user_avatar = user["user/avatar"]
-    ? user["user/avatar"]
-    : "hide-the-pain-harold.jpg";
-  const userLink = `/user/${user["user/username"]}`;
+export default function UserProfile() {
+  const { user, userSnaps } = useLoaderData();
 
   return (
     <>
       <Container>
-        <Columns>{user["user/username"]}</Columns>
+        <UserCard user={user} />
+        <SnapList snaps={userSnaps} />
       </Container>
-
-      <Card style={{ width: 300, marginBottom: "20px", margin: "auto" }}>
-        <Card.Image size="4by4" src={user["user/avatar"]} />
-        <Card.Content>
-          <Media>
-            <Media.Item>
-              <Heading size={4}>
-                <Link to={userLink}>{user["user/username"]}</Link>
-              </Heading>
-              <Heading subtitle size={6}>
-                {user["user/email"]}
-              </Heading>
-            </Media.Item>
-          </Media>
-          <Content>{user["user/bio"]}</Content>
-        </Card.Content>
-      </Card>
     </>
   );
 }

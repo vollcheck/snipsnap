@@ -14,9 +14,12 @@ import Snap, {
   loader as snapLoader,
 } from "./components/Snap";
 import UserList, { loader as userListLoader } from "./components/UserList";
-import UserProfile, { loader as userLoader } from "./components/UserProfile";
+import UserProfile, {
+  loader as userProfileLoader,
+} from "./components/UserProfile";
 
 import ErrorPage from "./error-page";
+import Logout from "./components/Logout";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { action as destroySnapAction } from "./components/DeleteSnap";
@@ -57,7 +60,7 @@ const router = createBrowserRouter([
           {
             path: "user/:username",
             element: <UserProfile />,
-            loader: userLoader,
+            loader: userProfileLoader,
           },
           {
             path: "sign-up",
@@ -68,6 +71,10 @@ const router = createBrowserRouter([
             path: "login",
             element: <Login />,
             // action: loginAction,
+          },
+          {
+            path: "logout",
+            element: <Logout />,
           },
           {
             path: "me",

@@ -1,7 +1,8 @@
 (ns snipsnap.controllers.auth
   (:require [ring.util.response :as r]
             [snipsnap.auth :refer [create-token]]
-            [snipsnap.models.user :as u]))
+            [snipsnap.models.user :as u]
+            [snipsnap.models.snap :as s]))
 
 (defn register
   [req]
@@ -41,3 +42,14 @@
        {:status 200
         :body {:user user
                :token (create-token user)}}))))
+
+(defn my-snaps
+  [req]
+  (let [db (get-in req [:application/component :database])
+        payload (:identity req)
+        user (u/get-user-by-payload db payload)
+        _ (println user)
+        username (:user/username user)
+        _ (println username)
+        ]
+    (s/get-snaps-by-username db username)))
