@@ -1,4 +1,3 @@
-import EditSnap, { action as editAction } from "./components/EditSnap";
 import Index, { loader as indexLoader } from "./components/Index";
 import Me, { loader as meLoader } from "./components/Me";
 import Root, { loader as rootLoader } from "./Root";
@@ -7,6 +6,7 @@ import SignUp, { action as signUpAction } from "./components/SignUp";
 import SnapDetail, {
   loader as snapDetailLoader,
 } from "./components/SnapDetail";
+import SnapEdit, { action as editAction } from "./components/SnapEdit";
 import UserList, { loader as userListLoader } from "./components/UserList";
 import UserProfile, {
   loader as userProfileLoader,
@@ -41,7 +41,7 @@ const router = createBrowserRouter([
           },
           {
             path: "snap/:snapId/edit",
-            element: <EditSnap />,
+            element: <SnapEdit />,
             loader: snapDetailLoader,
             action: editAction,
           },

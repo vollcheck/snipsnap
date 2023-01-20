@@ -65,9 +65,22 @@ export default function SnapDetail() {
             <span>{last_date}</span>
           </Card.Footer.Item>
         </Card.Footer>
-        <Button color="danger" type="submit" onClick={_deleteSnap}>
-          Delete
-        </Button>
+        <div className="buttons">
+          <Link
+            className="button is-warning"
+            to={`/snap/${snap["snap/id"]}/edit`}
+          >
+            Edit
+          </Link>
+          <Button
+            className="is-align-content-flex-end"
+            color="danger"
+            type="submit"
+            onClick={_deleteSnap}
+          >
+            Delete
+          </Button>
+        </div>
       </Box>
     </Container>
   );

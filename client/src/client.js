@@ -30,7 +30,6 @@ export const getUserSnaps = async (username) => {
 };
 
 export const upsertSnap = async (token, userId, name, content, languageId) => {
-  console.log(token);
   client.defaults.headers.common["Authorization"] = `Token ${token}`;
   const result = await client
     .post("/snap/", {
@@ -38,6 +37,18 @@ export const upsertSnap = async (token, userId, name, content, languageId) => {
       name: name,
       content: content,
       language_id: languageId,
+    })
+    .then((response) => response.data);
+  delete client.defaults.headers.common.Authorization;
+  return result;
+};
+
+export const updateSnap = async (token, snapId, data) => {
+  client.defaults.headers.common["Authorization"] = `Token ${token}`;
+  const result = await client
+    .post("/snap/", {
+      snap_id: snapId,
+      ...data,
     })
     .then((response) => response.data);
   delete client.defaults.headers.common.Authorization;
