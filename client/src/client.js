@@ -1,6 +1,5 @@
 import { BASE_BACKEND_URL } from "./config";
 import axios from "axios";
-import { cloneElement } from "react";
 
 // -- Client defintion
 const client = axios.create({
@@ -30,18 +29,28 @@ export const getUserSnaps = async (username) => {
     .then((response) => response.data);
 };
 
-export const upsertSnap = async (data) => {
-  // TODO: requires auth!
-  // for create you need to be authenticated
-  // for update you need to be authorized
-  return await client.post("/snap/", data).then((response) => response.data);
+export const upsertSnap = async (token, userId, name, content, languageId) => {
+  console.log(token);
+  client.defaults.headers.common["Authorization"] = `Token ${token}`;
+  const result = await client
+    .post("/snap/", {
+      user_id: userId,
+      name: name,
+      content: content,
+      language_id: languageId,
+    })
+    .then((response) => response.data);
+  delete client.defaults.headers.common.Authorization;
+  return result;
 };
 
-export const deleteSnap = async (snapId) => {
-  // TODO: requires authorization
-  return await client
+export const deleteSnap = async (token, snapId) => {
+  client.defaults.headers.common["Authorization"] = `Token ${token}`;
+  const result = await client
     .delete("/snap/" + snapId)
     .then((response) => response.data);
+  delete client.defaults.headers.common.Authorization;
+  return result;
 };
 
 // -- User endpoints
@@ -71,36 +80,27 @@ export const deleteUser = async (username) => {
 };
 
 export const register = async (data) => {
-  return await client.post("/register", data).then((response) => response.data);
+  // client.defaults.headers.common["Authorization"] = `Token ${token}`;
+  const response = await client
+    .post("/register", data)
+    .then((response) => response.data);
+  // delete client.defaults.headers.common.Authorization;
+  return response;
 };
 
 export const login = async (data) => {
   return await client.post("/login", data).then((response) => response.data);
 };
 
-export const getMe = async (token) => {
-  // Alter defaults after instance has been created
+export const getMe = async () => {
+  const token = localStorage.getItem("snipsnap-token");
   client.defaults.headers.common["Authorization"] = `Token ${token}`;
   const me = await client
     .get("/me")
     .then((response) => response.data.body.user);
-
-  // const mySnaps = await client
-  //   .get(`/user/${username}/snaps`)
-  //   .then((response) => response.data);
-  // // that's hack as well :^)
   delete client.defaults.headers.common.Authorization;
-  return me;
+  return { ...me, token };
 };
-
-// export const isAuthenticated = async (token) => {
-//   // Alter defaults after instance has been created
-//   client.defaults.headers.common["Authorization"] = `Token ${token}`;
-//   return await client
-//     .options("/me")
-//     .then((response) => response.data.body.token)
-//     .catch((_) => false);
-// };
 
 export const test_cors = async (data) => {
   return await client

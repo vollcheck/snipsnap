@@ -52,7 +52,10 @@ const Navbar = () => {
             <div className="buttons">
               {isA ? (
                 <>
-                  <Link className="button is-success is-light" to="/sign-up">
+                  <Link
+                    className="button is-success is-light"
+                    to="/create-snap"
+                  >
                     <strong>New snap</strong>
                   </Link>
                   <Link className="button is-light" to="/logout">

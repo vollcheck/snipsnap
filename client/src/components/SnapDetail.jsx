@@ -1,9 +1,10 @@
-import { Box, Card, Container, Content } from "react-bulma-components";
-import { Form, Link, useFetcher, useLoaderData } from "react-router-dom";
+import { Box, Button, Card, Container, Content } from "react-bulma-components";
+import { Link, useLoaderData, useNavigate } from "react-router-dom";
 import { capitalize, timeConverter } from "../utils";
-import { getSnap, login, test_cors, upsertSnap } from "../client";
 
-import SnapCard from "../components/SnapCard";
+import { deleteSnap } from "../client";
+import { getSnap } from "../client";
+import { getToken } from "../utils";
 
 export async function loader({ params }) {
   const snap = getSnap(params.snapId);
@@ -16,16 +17,16 @@ export async function loader({ params }) {
   return snap;
 }
 
-export async function action({ request, params }) {
-  let formData = await request.formData();
-  return upsertSnap(params.snapId, {
-    favorite: formData.get("favorite") === "true",
-  });
-}
-
-export default function Snap() {
+export default function SnapDetail() {
   const snap = useLoaderData();
-  console.log(snap);
+  const navigate = useNavigate();
+
+  const _deleteSnap = async () => {
+    const token = getToken();
+    const result = deleteSnap(token, snap["snap/id"]);
+    console.log(result);
+    navigate("/");
+  };
 
   // Do not tell anybody that this is repeated code
   let last_date;
@@ -39,15 +40,16 @@ export default function Snap() {
     ? `Written in ${capitalize(snap["language/name"])}`
     : "-";
 
+  const author = snap["user/username"];
+
   return (
     <Container>
       <Box>
         {/* TODO: edit */}
-        {/* TODO: delete */}
         <p className="title is-1">{snap["snap/name"]}</p>
-        <p className="subtitle is-3">
-          <a href="/">{snap["user/username"]}</a>
-        </p>
+        <Link className="subtitle is-3" to={`/user/${author}`}>
+          {author}
+        </Link>
         <Content>
           <pre>
             <code className={`language-${snap["language/name"]}`}>
@@ -57,13 +59,15 @@ export default function Snap() {
         </Content>
         <Card.Footer>
           <Card.Footer.Item>
-            {/* <span>Written in {capitalize(snap["language/name"])}</span> */}
             <span>{snap_lang}</span>
           </Card.Footer.Item>
           <Card.Footer.Item>
             <span>{last_date}</span>
           </Card.Footer.Item>
         </Card.Footer>
+        <Button color="danger" type="submit" onClick={_deleteSnap}>
+          Delete
+        </Button>
       </Box>
     </Container>
   );

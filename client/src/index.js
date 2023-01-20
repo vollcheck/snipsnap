@@ -1,35 +1,30 @@
 import EditSnap, { action as editAction } from "./components/EditSnap";
 import Index, { loader as indexLoader } from "./components/Index";
-import Login, { action as loginAction } from "./components/Login";
 import Me, { loader as meLoader } from "./components/Me";
-import Root, { action as rootAction } from "./Root";
-import {
-  RouterProvider,
-  createBrowserRouter,
-  useRouteLoaderData,
-} from "react-router-dom";
+import Root, { loader as rootLoader } from "./Root";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import SignUp, { action as signUpAction } from "./components/SignUp";
-import Snap, {
-  action as snapAction,
-  loader as snapLoader,
-} from "./components/Snap";
+import SnapDetail, {
+  loader as snapDetailLoader,
+} from "./components/SnapDetail";
 import UserList, { loader as userListLoader } from "./components/UserList";
 import UserProfile, {
   loader as userProfileLoader,
 } from "./components/UserProfile";
 
 import ErrorPage from "./error-page";
+import Login from "./components/Login";
 import Logout from "./components/Logout";
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { action as destroySnapAction } from "./components/DeleteSnap";
+import SnapCreate from "./components/SnapCreate";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Root />,
     errorElement: <ErrorPage />,
-    action: rootAction,
+    loader: rootLoader,
     children: [
       {
         errorElement: <ErrorPage />,
@@ -37,20 +32,18 @@ const router = createBrowserRouter([
           { index: true, element: <Index />, loader: indexLoader },
           {
             path: "snap/:snapId",
-            element: <Snap />,
-            loader: snapLoader,
-            action: snapAction,
+            element: <SnapDetail />,
+            loader: snapDetailLoader,
+          },
+          {
+            path: "create-snap",
+            element: <SnapCreate />,
           },
           {
             path: "snap/:snapId/edit",
             element: <EditSnap />,
-            loader: snapLoader,
+            loader: snapDetailLoader,
             action: editAction,
-          },
-          {
-            path: "snap/:snapId/destroy",
-            action: destroySnapAction,
-            errorElement: <div>Oops! There was an error.</div>,
           },
           {
             path: "users",

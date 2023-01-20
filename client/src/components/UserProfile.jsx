@@ -1,15 +1,6 @@
-import {
-  Card,
-  Columns,
-  Container,
-  Content,
-  Heading,
-  Image,
-  Media,
-} from "react-bulma-components";
 import { getUser, getUserSnaps } from "../client";
 
-import { Link } from "react-router-dom";
+import { Container } from "react-bulma-components";
 import SnapList from "./SnapList";
 import UserCard from "./UserCard";
 import { useLoaderData } from "react-router-dom";

@@ -1,32 +1,19 @@
 import "react-toastify/dist/ReactToastify.css"; // move that to the index
 
-import { Outlet, redirect, useNavigation } from "react-router-dom";
+// eslint-disable-next-line
 import { ToastContainer, toast } from "react-toastify";
 
 import Navbar from "./components/Navbar";
+import { Outlet } from "react-router-dom";
 import SnipSnapFooter from "./components/Footer";
-import { isAuthenticated } from "./utils";
-import { upsertSnap } from "./client";
+import { listSnaps } from "./client";
 
-export async function action() {
-  const snap = await upsertSnap();
-  return redirect(`/snap/${snap.id}/edit`);
+export async function loader({ request }) {
+  const snaps = await listSnaps();
+  return { snaps };
 }
 
 const Root = () => {
-  // const { snaps, q } = useLoaderData();
-  const navigation = useNavigation();
-
-  // const submit = useSubmit();
-
-  // const searching =
-  //   navigation.location &&
-  //   new URLSearchParams(navigation.location.search).has("q");
-
-  // useEffect(() => {
-  //   document.getElementById("q").value = q;
-  // }, [q]);
-
   return (
     <>
       <div className="container hero is-fullheight">

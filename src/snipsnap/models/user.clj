@@ -71,6 +71,7 @@
 
 (defn get-user-by-payload
   [db data]
+  (println "get user by payload" db)
   ;; data => #:user{:id 1, :username "vollcheck"}
   (let [{:keys [user/id user/username]} data
         query {:select [:id :username]

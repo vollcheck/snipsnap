@@ -1,5 +1,3 @@
-import { getMe } from "./client";
-
 export const timeConverter = (timestamp) => {
   return new Date(timestamp).toLocaleDateString();
 };

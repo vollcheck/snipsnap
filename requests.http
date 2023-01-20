@@ -40,12 +40,28 @@ POST :url/snap/
 
 ###
 
+OPTIONS :url/snap/
+:json
+:auth
+
+##
+
+
+POST :url/snap/
+:json
+:auth
+
+{"user_id": 1,
+ "snap/name": "IT'S JUST A COMMENT, OKAY?",
+ "language_id": 1}
+
 # snap update, not create
 
 POST :url/snap/
 :json
+:auth
 
-{"snap/id": 2,
+{"snap/id": 4124,
  "snap/name": "IT'S JUST A COMMENT, OKAY?"}
 
 ###
@@ -83,7 +99,7 @@ POST :url/login
 :json
 
 {"username": "vollcheck",
- "password": ""}
+ "password": "admin"}
 
 ###
 

@@ -74,12 +74,10 @@
   [handler]
   (fn [req]
     (let [resp (handler req)]
-      (if (resp/response? resp)
-        (-> resp
-            (assoc-in [:headers "Access-Control-Allow-Origin"] "http://localhost:3000")
-            (assoc-in [:headers "Access-Control-Allow-Methods"] "*")
-            (assoc-in [:headers "Access-Control-Allow-Headers"] "*"))
-        "no response"))))
+      (-> resp
+          (assoc-in [:headers "Access-Control-Allow-Origin"] "http://localhost:3000")
+          (assoc-in [:headers "Access-Control-Allow-Methods"] "*")
+          (assoc-in [:headers "Access-Control-Allow-Headers"] "*")))))
 
 ;; Helper for building the middleware:
 (defn- add-app-component
@@ -108,8 +106,8 @@
         (wrap-json-response)
         (wrap-json-body)
         (wrap-json-params)
-        ;; (wrap-cors :access-control-allow-origin #"http://localhost:3000"
-        ;;            :access-control-allow-methods [:get :post :put :delete])
+        (wrap-cors :access-control-allow-origin #".*"
+                   :access-control-allow-methods [:get :post :put :delete])
         )))
 
 (defn auth-stack
@@ -134,7 +132,7 @@
         (wrap-json-response)
         (wrap-json-body)
         (wrap-json-params)
-        (wrap-cors :access-control-allow-origin #"http://localhost:3000"
+        (wrap-cors :access-control-allow-origin #".*"
                    :access-control-allow-methods [:get :post :put :delete])
         )))
 
@@ -180,8 +178,11 @@
 
     ;; snap
     (GET    "/snaps"        []              (wrap #'snap-ctl/snap-list))
+    (OPTIONS "/snaps"        []              (wrap #'snap-ctl/snap-list))
     (GET    "/snap/:id"     [id :<< as-int] (wrap #'snap-ctl/read-snap))
     (POST   "/snap/"        []              (auth-wrap #'snap-ctl/create-or-update-snap))
+    (OPTIONS "/snap/"       []              (auth-wrap #'snap-ctl/create-or-update-snap))
+    (OPTIONS "/snap/:id"     [id :<< as-int] (auth-wrap #'snap-ctl/delete-snap))
     (DELETE "/snap/:id"     [id :<< as-int] (auth-wrap #'snap-ctl/delete-snap))
 
     ;; other

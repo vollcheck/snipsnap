@@ -33,6 +33,8 @@
 (defn me
   [req]
   (let [db (get-in req [:application/component :database])
+        _ (def req1 req)
+        _ (println "request from `me` endpoint` " req)
         payload (:identity req)
         user (u/get-user-by-payload db payload)]
     (r/response

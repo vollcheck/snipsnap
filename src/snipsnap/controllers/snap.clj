@@ -6,9 +6,23 @@
 (defn create-or-update-snap
   [req]
   (let [db (get-in req [:application/component :database])
+        _ (def db1 req)
         data (clean-entity-data (:json-params req))
-        result_id (->> data (snap/save-snap db) first second)]
-    (r/response {:snap/id result_id})))
+        _ (println "cleaned data" data)
+        result-id (-> (snap/save-snap db data) first second)
+        ]
+    (r/response {:snap/id result-id})))
+
+(comment
+  (def db (get snipsnap.main/system :database))
+  (def data {:user_id 1,
+             :name "just a comment another one",
+             :content "(commentfdajslfdsajlfdajslf)",
+             :language_id 1})
+  (def data2
+    {:user_id 1, :snap/name "IT'S JUST A COMMENT, OKAY?"})
+  (snap/save-snap db data)
+  )
 
 (defn snap-list
   [req]
@@ -35,12 +49,3 @@
                   (str "Can't delete snap with id " id ", doesn't exist")
                   (str "Sucessfully deleted snap with id " id))]
     (r/response {:message message})))
-
-(comment
-  (def db (get snipsnap.main/system :database))
-  (def data {:user_id 1,
-             :name "just a comment another one",
-             :content "(commentfdajslfdsajlfdajslf)",
-             :language_id 1})
-  (snap/save-snap db data)
-  )

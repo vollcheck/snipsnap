@@ -6,8 +6,11 @@
 
 (defn clean-entity-data
   [data]
-  (let [ns-len (-> data keys first (str/index-of "/") inc)]
+  (if-let [ns (-> data keys first (str/index-of "/"))]
     (->> data
-         (map (fn [[k v]] [(keyword (subs k ns-len))
+         (map (fn [[k v]] [(keyword (subs k (inc ns)))
                           v]))
-         (into {}))))
+         (into {}))
+    (clojure.walk/keywordize-keys data)))
+
+(clean-entity-data {"name" "testing snip", "content" "i said it's testing!"})

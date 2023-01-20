@@ -48,7 +48,6 @@ export default function Login() {
 
   return (
     <Box style={{ margin: "auto" }}>
-      {/* <RouterForm method="post" action="/login"> */}
       <form onSubmit={handleSubmit}>
         <Form.Field>
           <Form.Label>Username</Form.Label>
@@ -73,7 +72,7 @@ export default function Login() {
               }}
             />
           </Form.Control>
-          {error ? <Form.Help color="danger">{error}</Form.Help> : <br />}
+          {error ? <Form.Help color="danger">{error}</Form.Help> : <></>}
         </Form.Field>
 
         <Form.Field kind="group">

@@ -1,4 +1,4 @@
-import { Card, Content, Heading, Media } from "react-bulma-components";
+import { Card, Content, Heading } from "react-bulma-components";
 
 import { Link } from "react-router-dom";
 import { getUserAvatar } from "../utils";

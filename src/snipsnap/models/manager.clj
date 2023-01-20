@@ -66,7 +66,8 @@ create table user (
         (catch Exception e
           (println "Exception:" (ex-message e))
           (println "Unable to populate the initial data -- proceed with caution!")))
-      (catch Exception _
+      (catch Exception e
+        ;; (println e)
         (println "Looks like the database is already setup. Squashing SQL error.")))))
 
 ;; database component
