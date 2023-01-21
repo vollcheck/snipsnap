@@ -12,6 +12,8 @@ import { updateSnap } from "../client";
 export async function action({ request, params }) {
   const formData = await request.formData();
   const updates = Object.fromEntries(formData);
+  updates["id"] = params.snapId;
+  console.log(updates);
   const token = getToken();
   await updateSnap(token, params.snapId, updates);
   return redirect(`/snap/${params.snapId}`);

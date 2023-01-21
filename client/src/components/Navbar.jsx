@@ -1,9 +1,16 @@
 import { Link } from "react-router-dom";
 import { isAuthenticated } from "../utils";
+import { useEffect } from "react";
 import { useState } from "react";
 
 const Navbar = () => {
-  const isA = isAuthenticated();
+  const [isA, setIsA] = useState(isAuthenticated());
+
+  useEffect(() => {
+    const isAHelper = async () => {
+      isAuthenticated();
+    };
+  }, isA);
   const [activeBurger, setActiveBurger] = useState(false);
 
   return (

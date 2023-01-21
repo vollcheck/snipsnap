@@ -8,10 +8,26 @@
   (let [db (get-in req [:application/component :database])
         _ (def db1 req)
         data (clean-entity-data (:json-params req))
-        _ (println "cleaned data" data)
-        result-id (-> (snap/save-snap db data) first second)
+        data (if (:id data)
+               (update data :id #(Integer/parseUnsignedInt %))
+               data)
+        data (-> data
+                 (assoc :language_id (:language data))
+                 (dissoc :language))
+        ;; result-id (-> (snap/save-snap db data) first second)
+        result (snap/save-snap db data)
         ]
-    (r/response {:snap/id result-id})))
+    (r/response {:snap/id result})))
+
+(comment
+  (def ds (get-in snipsnap.main/system [:database]))
+  (def data (clean-entity-data {"user_id" 1,
+ "name" "fdjalsfjdlks",
+ "content" "fjdsalkfjdlsakj",
+                                "language_id" 1}))
+  data
+  (snap/save-snap ds data)
+  )
 
 (comment
   (def db (get snipsnap.main/system :database))

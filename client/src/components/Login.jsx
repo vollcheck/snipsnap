@@ -1,5 +1,5 @@
 import { Box, Button, Container, Form, Icon } from "react-bulma-components";
-import { Form as RouterForm, useNavigate } from "react-router-dom";
+import { Form as RouterForm, redirect, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 import React from "react";
@@ -23,7 +23,8 @@ export default function Login() {
     if (token) {
       console.log("i'm already authenticated!");
       // toast("You are already logged!");
-      navigate("/");
+      // navigate("/");
+      redirect("/");
     }
   }, []);
 

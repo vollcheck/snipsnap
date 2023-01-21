@@ -122,7 +122,6 @@ This JAR file can be deployed to any server that have Java installed and run wit
 
 # License & Copyright
 
-Copyright (c) 2015-2022 Sean Corfield.
-              2022 vollcheck
+Copyright (c) 2022 vollcheck
 
 Distributed under the Apache Source License 2.0.

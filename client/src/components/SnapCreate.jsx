@@ -36,7 +36,7 @@ export default function SnapCreate() {
     if (!createdSnap) {
       setError("Error while creating new snap");
     } else {
-      navigate(`/snap/${createdSnap["snap/id"]}`);
+      navigate(`/snap/${createdSnap["snap/id"]["last_insert_rowid()"]}`);
     }
   };
 

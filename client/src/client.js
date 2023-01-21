@@ -47,7 +47,7 @@ export const updateSnap = async (token, snapId, data) => {
   client.defaults.headers.common["Authorization"] = `Token ${token}`;
   const result = await client
     .post("/snap/", {
-      snap_id: snapId,
+      id: snapId,
       ...data,
     })
     .then((response) => response.data);

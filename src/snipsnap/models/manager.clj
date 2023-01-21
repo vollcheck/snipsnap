@@ -38,7 +38,7 @@ create table snap (
   user_id       integer not null,
   name          text,
   content       text,
-  language_id   integer not null,
+  language_id   integer,
   create_date   varchar(128),
   update_date   varchar(128)
 )")])

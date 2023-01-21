@@ -1,10 +1,10 @@
 import "react-toastify/dist/ReactToastify.css"; // move that to the index
 
+import { Outlet, useLoaderData } from "react-router-dom";
 // eslint-disable-next-line
 import { ToastContainer, toast } from "react-toastify";
 
 import Navbar from "./components/Navbar";
-import { Outlet } from "react-router-dom";
 import SnipSnapFooter from "./components/Footer";
 import { listSnaps } from "./client";
 
@@ -18,11 +18,7 @@ const Root = () => {
     <>
       <div className="container hero is-fullheight">
         <Navbar />
-        <Outlet>
-          <div>
-            <ToastContainer />
-          </div>
-        </Outlet>
+        <Outlet />
         <SnipSnapFooter />
       </div>
     </>
